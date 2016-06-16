@@ -19,8 +19,7 @@ var managerEntry = process.env.DEV_BUILD ? _path2.default.resolve(__dirname, '..
 var config = {
   devtool: '#cheap-module-eval-source-map',
   entry: {
-    manager: [managerEntry],
-    preview: [_path2.default.resolve(__dirname, './error_enhancements'), 'webpack-hot-middleware/client']
+    manager: [managerEntry]
   },
   output: {
     path: _path2.default.join(__dirname, 'dist'),

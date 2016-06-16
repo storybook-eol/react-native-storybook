@@ -1,6 +1,6 @@
 import 'es6-shim';
-import renderStorybookUI from '@kadira/storybook-ui';
+import render from '@kadira/storybook-ui';
 import Provider from './provider';
 
-const rootEl = document.getElementById('root');
-renderStorybookUI(rootEl, new Provider());
+const root = document.getElementById('root');
+render(root, new Provider());

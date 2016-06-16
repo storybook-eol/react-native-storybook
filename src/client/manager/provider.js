@@ -1,60 +1,41 @@
 import Preview from './preview';
-import qs from 'qs';
-import UUID from 'uuid';
 import React from 'react';
-import createPageBus from 'page-bus';
+import io from 'socket.io-client';
 
-export default class ReactProvider {
+export default class Provider {
   constructor() {
-    this.dataId = UUID.v4();
+    this.socket = io(location.host, {jsonp: false});
+    this.socket.emit('init', {type: 'browser'});
+    this.socket.emit('getStories', {});
   }
 
   renderPreview(selectedKind, selectedStory) {
-    const queryParams = {
-      dataId: this.dataId,
-      selectedKind,
-      selectedStory,
-    };
-
-    const queryString = qs.stringify(queryParams);
-    const url = `iframe.html?${queryString}`;
-    return (
-      <Preview url={url} />
-    );
+    if (selectedKind && selectedStory) {
+      const selection = {kind: selectedKind, story: selectedStory};
+      this.socket.emit('selectStory', selection);
+    }
+    return <Preview />;
   }
 
   handleAPI(api) {
-    const dataId = this.dataId;
-    const bus = createPageBus();
-
-    api.onStory(function (kind, story) {
-      const payload = {
-        kind,
-        story,
-      };
-
-      bus.emit(`${dataId}.setCurrentStory`, JSON.stringify(payload));
+    api.onStory((kind, story) => {
+      this.socket.emit('selectStory', {kind, story});
     });
 
-    // watch pageBus and put both actions and stories.
-    bus.on(`${dataId}.addAction`, function (payload) {
-      const data = JSON.parse(payload);
-      api.addAction(data.action);
+    this.socket.on('addAction', msg => {
+      api.addAction(msg.action);
     });
 
-    bus.on(`${dataId}.setStories`, function (payload) {
-      const data = JSON.parse(payload);
-      api.setStories(data.stories);
+    this.socket.on('setStories', msg => {
+      api.setStories(msg.stories);
     });
 
-    bus.on(`${dataId}.selectStory`, function (payload) {
-      const data = JSON.parse(payload);
-      api.selectStory(data.kind, data.story);
+    this.socket.on('selectStory', msg => {
+      api.selectStory(msg.kind, msg.story);
     });
 
-    bus.on(`${dataId}.applyShortcut`, function (payload) {
-      const data = JSON.parse(payload);
-      api.handleShortcut(data.event);
+    this.socket.on('applyShortcut', msg => {
+      api.handleShortcut(msg.event);
     });
   }
 }

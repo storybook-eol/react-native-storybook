@@ -2,17 +2,10 @@ import { Router } from 'express';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import baseConfig from './webpack.config';
-import loadConfig from './config';
+import config from './webpack.config';
 import getIndexHtml from './index.html';
-import getIframeHtml from './iframe.html';
-import { getHeadHtml } from './utils';
 
-export default function (configDir) {
-  // Build the webpack configuration using the `baseConfig`
-  // custom `.babelrc` file and `webpack.config.js` files
-  const config = loadConfig('DEVELOPMENT', baseConfig, configDir);
-
+export default function () {
   // remove the leading '/'
   let publicPath = config.output.publicPath;
   if (publicPath[0] === '/') {
@@ -31,11 +24,6 @@ export default function (configDir) {
 
   router.get('/', function (req, res) {
     res.send(getIndexHtml(publicPath));
-  });
-
-  const headHtml = getHeadHtml(configDir);
-  router.get('/iframe.html', function (req, res) {
-    res.send(getIframeHtml(headHtml, publicPath));
   });
 
   return router;

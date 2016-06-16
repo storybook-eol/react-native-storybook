@@ -12,10 +12,6 @@ const config = {
     manager: [
       managerEntry,
     ],
-    preview: [
-      path.resolve(__dirname, './error_enhancements'),
-      'webpack-hot-middleware/client',
-    ],
   },
   output: {
     path: path.join(__dirname, 'dist'),

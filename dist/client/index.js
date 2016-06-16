@@ -1,17 +1,34 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.configure = exports.linkTo = exports.action = exports.storiesOf = undefined;
+exports.configure = configure;
+exports.storiesOf = storiesOf;
+function configure(loaders) {
+  loaders();
+}
 
-var _preview = require('./preview');
+var StoryStore = exports.StoryStore = {};
+function storiesOf(kind) {
+  var decorators = [];
+  var api = {};
 
-var previewApi = _interopRequireWildcard(_preview);
+  api.add = function (story, getStory) {
+    // Wrap the getStory function with each decorator. The first
+    // decorator will wrap the story function. The second will
+    // wrap the first decorator and so on.
+    var fn = decorators.reduce(function (decorated, decorator) {
+      return function () {
+        return decorator(decorated);
+      };
+    }, getStory);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+    // Add the fully decorated getStory function.
+    StoryStore[kind] = StoryStore[kind] || { stories: {} };
+    StoryStore[kind].stories[story] = fn;
+    return api;
+  };
 
-var storiesOf = exports.storiesOf = previewApi.storiesOf;
-var action = exports.action = previewApi.action;
-var linkTo = exports.linkTo = previewApi.linkTo;
-var configure = exports.configure = previewApi.configure;
+  return api;
+}

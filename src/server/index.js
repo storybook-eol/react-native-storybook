@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 
+import http from 'http';
 import express from 'express';
 import program from 'commander';
 import path from 'path';
 import fs from 'fs';
+import SocketIO from 'socket.io';
 import storybook from './middleware';
 import packageJson from '../../package.json';
-import { parseList } from './utils';
 
+// avoid eslint errors
 const logger = console;
 
 program
   .version(packageJson.version)
   .option('-p, --port [number]', 'Port to run Storybook (Required)', parseInt)
   .option('-h, --host [string]', 'Host to run Storybook')
-  .option('-s, --static-dir <dir-names>', 'Directory where to load static files from', parseList)
-  .option('-c, --config-dir [dir-name]', 'Directory where to load Storybook configurations from')
   .parse(process.argv);
 
 if (!program.port) {
@@ -32,25 +32,33 @@ if (program.host) {
 }
 
 const app = express();
+app.use(storybook());
 
-if (program.staticDir) {
-  program.staticDir.forEach(dir => {
-    const staticPath = path.resolve(dir);
-    if (!fs.existsSync(staticPath)) {
-      logger.error(`Error: no such directory to load static files: ${staticPath}`);
-      process.exit(-1);
+const server = http.Server(app);
+const io = SocketIO(server);
+
+io.on('connection', function (socket) {
+  socket.on('init', function (msg) {
+    const clientType = msg.type;
+    socket.join(clientType);
+
+    // device ==> browser
+    if (clientType === 'device') {
+      ['setStories', 'addAction', 'selectStory', 'applyShortcut'].forEach(type => {
+        socket.on(type, m => io.sockets.in('browser').emit(type, m));
+      });
     }
-    logger.log(`=> Loading static files from: ${staticPath} .`);
-    app.use(express.static(staticPath, { index: false }));
+
+    // browser ==> device
+    if (clientType === 'browser') {
+      ['getStories', 'selectStory'].forEach(type => {
+        socket.on(type, m => io.sockets.in('device').emit(type, m));
+      });
+    }
   });
-}
+});
 
-// Build the webpack configuration using the `baseConfig`
-// custom `.babelrc` file and `webpack.config.js` files
-const configDir = program.configDir || './.storybook';
-app.use(storybook(configDir));
-
-app.listen(...listenAddr, function (error) {
+server.listen(...listenAddr, function (error) {
   if (error) {
     throw error;
   } else {

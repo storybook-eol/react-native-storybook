@@ -1,6 +1,6 @@
 {
-  "name": "@kadira/storybook",
-  "version": "1.32.0",
+  "name": "@kadira/react-native-storybook",
+  "version": "0.0.0",
   "description": "React Storybook: Isolate React Component Development with Hot Reloading.",
   "repository": {
     "type": "git",
@@ -39,6 +39,8 @@
     "qs": "^6.1.0",
     "redbox-react": "^1.2.2",
     "shelljs": "^0.6.0",
+    "socket.io": "^1.4.6",
+    "socket.io-client": "^1.4.6",
     "stack-source-map": "^1.0.5",
     "uuid": "^2.0.1",
     "webpack": "^1.12.11",
@@ -79,8 +81,6 @@
     "npm": "^3.0.0"
   },
   "bin": {
-    "start-storybook": "./dist/server/index.js",
-    "build-storybook": "./dist/server/build.js",
-    "storybook-server": "./dist/server/index.js"
+    "start-storybook": "./dist/server/index.js"
   }
 }

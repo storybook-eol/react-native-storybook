@@ -4,21 +4,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.default = function (configDir) {
-  // Build the webpack configuration using the `baseConfig`
-  // custom `.babelrc` file and `webpack.config.js` files
-  var config = (0, _config2.default)('DEVELOPMENT', _webpack4.default, configDir);
-
+exports.default = function () {
   // remove the leading '/'
-  var publicPath = config.output.publicPath;
+  var publicPath = _webpack4.default.output.publicPath;
   if (publicPath[0] === '/') {
     publicPath = publicPath.slice(1);
   }
 
-  var compiler = (0, _webpack2.default)(config);
+  var compiler = (0, _webpack2.default)(_webpack4.default);
   var devMiddlewareOptions = {
     noInfo: true,
-    publicPath: config.output.publicPath
+    publicPath: _webpack4.default.output.publicPath
   };
 
   var router = new _express.Router();
@@ -27,11 +23,6 @@ exports.default = function (configDir) {
 
   router.get('/', function (req, res) {
     res.send((0, _index2.default)(publicPath));
-  });
-
-  var headHtml = (0, _utils.getHeadHtml)(configDir);
-  router.get('/iframe.html', function (req, res) {
-    res.send((0, _iframe2.default)(headHtml, publicPath));
   });
 
   return router;
@@ -55,18 +46,8 @@ var _webpack3 = require('./webpack.config');
 
 var _webpack4 = _interopRequireDefault(_webpack3);
 
-var _config = require('./config');
-
-var _config2 = _interopRequireDefault(_config);
-
 var _index = require('./index.html');
 
 var _index2 = _interopRequireDefault(_index);
-
-var _iframe = require('./iframe.html');
-
-var _iframe2 = _interopRequireDefault(_iframe);
-
-var _utils = require('./utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
