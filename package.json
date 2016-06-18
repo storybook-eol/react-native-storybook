@@ -4,7 +4,7 @@
   "description": "A better way to develop React Native Components for your app",
   "main": "dist/client/index.js",
   "bin": {
-    "storybook": "dist/bin/cli.js"
+    "storybook": "dist/bin/storybook.js"
   },
   "scripts": {
     "prepublish": ".scripts/npm-prepublish.sh",
