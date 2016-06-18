@@ -1104,7 +1104,7 @@ JSONPPolling.prototype.doPoll = function () {
   }
   this.script = script;
 
-  var isUAgecko = 'undefined' != typeof navigator && /gecko/i.test(navigator.userAgent);
+  var isUAgecko = 'undefined' != typeof navigator && 'undefined' != typeof navigator.userAgent && /gecko/i.test(navigator.userAgent);
 
   if (isUAgecko) {
     setTimeout(function () {
@@ -2015,6 +2015,7 @@ WS.prototype.addEventListeners = function(){
  */
 
 if ('undefined' != typeof navigator
+  && 'undefined' != typeof navigator.userAgent
   && /iPad|iPhone|iPod/i.test(navigator.userAgent)) {
   WS.prototype.onData = function(data){
     var self = this;
@@ -2640,7 +2641,7 @@ function useColors() {
     (window.console && (console.firebug || (console.exception && console.table))) ||
     // is firefox >= v31?
     // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
+    ('undefined' != typeof navigator && 'undefined' != typeof navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
 }
 
 /**
@@ -2982,7 +2983,7 @@ var utf8 = _dereq_('utf8');
  * http://ghinda.net/jpeg-blob-ajax-android/
  */
 
-var isAndroid = navigator.userAgent.match(/Android/i);
+var isAndroid = 'undefined' != typeof navigator && 'undefined' != typeof navigator.userAgent && navigator.userAgent.match(/Android/i);
 
 /**
  * Check if we are running in PhantomJS.
@@ -2990,7 +2991,7 @@ var isAndroid = navigator.userAgent.match(/Android/i);
  * https://github.com/ariya/phantomjs/issues/11395
  * @type boolean
  */
-var isPhantomJS = /PhantomJS/i.test(navigator.userAgent);
+var isPhantomJS = 'undefined' != typeof navigator && 'undefined' != typeof navigator.userAgent && /PhantomJS/i.test(navigator.userAgent);
 
 /**
  * When true, avoids using Blobs to encode payloads.
