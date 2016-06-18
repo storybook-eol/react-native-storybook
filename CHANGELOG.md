@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.0.4
+
+- Fix socket.io by using a patched socket.io temporarily [PR #2](https://github.com/kadirahq/react-native-storybook/pull/2)
+
 ## v1.0.3
 
 - Fix `window.navigator.userAgent` related issue with socket.io [Issue #1](https://github.com/kadirahq/react-native-storybook/issues/1)
