@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.0.3
+
+- Fix `window.navigator.userAgent` related issue with socket.io [Issue #1](https://github.com/kadirahq/react-native-storybook/issues/1)
+
 ## v1.0.2
 
 - Rename storybook command file from `cli.js` to `storybook.js`
