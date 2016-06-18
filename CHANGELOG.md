@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.0.2
+
+- Rename storybook command file from `cli.js` to `storybook.js`
+
 ## v1.0.1
 
 - Add missing dependency `commander` to package.json file
