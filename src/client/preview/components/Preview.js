@@ -14,9 +14,13 @@ export default class Preview extends Component {
   }
 
   componentDidMount() {
-    // this fixes the window.navigator.userAgent issue
-    // TODO: find out why it's working when set this way
-    const io = require('socket.io-client/socket.io');
+    // TODO use an official release of socket.io-client instead
+    // used a patched socket-io client until following happens
+    // - engine.io-parser releases a new version after this pull-request
+    //   https://github.com/socketio/engine.io-parser/pull/55
+    // - socket.io-client uses the patched engine.io-parser and releases
+    //   https://github.com/socketio/socket.io-client/issues/945
+    const io = require('../../_vendor/patched-socket.io.js');
 
     // new connection
     this.socket = io(this.props.address, {jsonp: false});
