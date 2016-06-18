@@ -14,10 +14,6 @@ var _CenteredText = require('./CenteredText');
 
 var _CenteredText2 = _interopRequireDefault(_CenteredText);
 
-var _socket = require('socket.io-client/socket.io');
-
-var _socket2 = _interopRequireDefault(_socket);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50,8 +46,12 @@ var Preview = function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
+      // this fixes the window.navigator.userAgent issue
+      // TODO: find out why it's working when set this way
+      var io = require('socket.io-client/socket.io');
+
       // new connection
-      this.socket = (0, _socket2.default)(this.props.address, { jsonp: false });
+      this.socket = io(this.props.address, { jsonp: false });
 
       // initial setup
       this.socket.emit('init', { type: 'device' });

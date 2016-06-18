@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import CenteredText from './CenteredText';
-import io from 'socket.io-client/socket.io';
 
 export default class Preview extends Component {
   static propTypes = {
@@ -15,6 +14,10 @@ export default class Preview extends Component {
   }
 
   componentDidMount() {
+    // this fixes the window.navigator.userAgent issue
+    // TODO: find out why it's working when set this way
+    const io = require('socket.io-client/socket.io');
+
     // new connection
     this.socket = io(this.props.address, {jsonp: false});
 
