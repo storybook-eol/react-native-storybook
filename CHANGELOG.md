@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.1.2
+
+- Partially fix hot module reloading [Issue #8](https://github.com/kadirahq/react-native-storybook/issues/8) with [PR #10](https://github.com/kadirahq/react-native-storybook/pull/10)
+
 ## v1.1.1
 
 - Build source files and write README
