@@ -40,6 +40,11 @@ export default class Preview extends Component {
       const {kind, story} = msg;
       this.setState({selection: {kind, story}});
     });
+
+    // listen for story changes
+    this.props.stories.on('change', () => {
+      this.socket.emit('setStories', {stories: this.props.stories.dump()});
+    });
   }
 
   render() {

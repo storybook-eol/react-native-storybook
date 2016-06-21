@@ -74,6 +74,11 @@ var Preview = function (_Component) {
 
         _this2.setState({ selection: { kind: kind, story: story } });
       });
+
+      // listen for story changes
+      this.props.stories.on('change', function () {
+        _this2.socket.emit('setStories', { stories: _this2.props.stories.dump() });
+      });
     }
   }, {
     key: 'render',
