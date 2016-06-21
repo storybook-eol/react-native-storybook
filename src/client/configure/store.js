@@ -1,5 +1,8 @@
-export default class StoryStore {
-  constructor() {
+import { EventEmitter } from 'events';
+
+export default class StoryStore extends EventEmitter {
+  constructor(...args) {
+    super(...args);
     this.data = {};
   }
 

@@ -3,8 +3,14 @@ import StoryStore from './store';
 export const stories = new StoryStore();
 
 //
-export function configure(loaders) {
+export function configure(loaders, module) {
   loaders();
+
+  if (module.hot) {
+    module.hot.accept(() => {
+      stories.emit('change');
+    });
+  }
 }
 
 //

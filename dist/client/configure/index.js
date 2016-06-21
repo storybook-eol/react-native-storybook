@@ -16,8 +16,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var stories = exports.stories = new _store2.default();
 
 //
-function configure(loaders) {
+function configure(loaders, module) {
   loaders();
+
+  if (module.hot) {
+    module.hot.accept(function () {
+      stories.emit('change');
+    });
+  }
 }
 
 //
