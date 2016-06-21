@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.1.1
+
+- Build source files and write README
+
+## v1.1.0
+
+- Replace `PreviewContainer` with `PreviewComponent` where the host and port are configurable
+
 ## v1.0.4
 
 - Fix socket.io by using a patched socket.io temporarily [PR #2](https://github.com/kadirahq/react-native-storybook/pull/2)
