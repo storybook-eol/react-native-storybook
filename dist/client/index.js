@@ -19,7 +19,7 @@ Object.defineProperty(exports, 'storiesOf', {
     return _configure.storiesOf;
   }
 });
-exports.PreviewContainer = PreviewContainer;
+exports.PreviewComponent = PreviewComponent;
 
 var _react = require('react');
 
@@ -33,8 +33,13 @@ var _configure2 = require('./configure');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// export the preview container
-function PreviewContainer() {
-  var address = 'localhost:9001';
-  return _react2.default.createElement(_Preview2.default, { address: address, stories: _configure2.stories });
+// export the function to generate the preview component
+function PreviewComponent(_ref) {
+  var port = _ref.port;
+  var _ref$host = _ref.host;
+  var host = _ref$host === undefined ? 'localhost' : _ref$host;
+
+  return function () {
+    return _react2.default.createElement(_Preview2.default, { address: host + ':' + port, stories: _configure2.stories });
+  };
 }
