@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.1.3
+
+- Remove socket.io and use plain Websockets [PR #17](https://github.com/kadirahq/react-native-storybook/pull/17). Removes JS debugging requirement.
+
 ## v1.1.2
 
 - Partially fix hot module reloading [Issue #8](https://github.com/kadirahq/react-native-storybook/issues/8) with [PR #10](https://github.com/kadirahq/react-native-storybook/pull/10)
