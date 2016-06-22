@@ -7,43 +7,70 @@ export default class Preview extends Component {
     stories: React.PropTypes.object.isRequired,
   }
 
-  constructor(...args) {
-    super(...args);
+  constructor(...props) {
+    super(...props);
     this.socket = null;
     this.state = {selection: null};
   }
 
-  componentDidMount() {
-    // TODO use an official release of socket.io-client instead
-    // used a patched socket-io client until following happens
-    // - engine.io-parser releases a new version after this pull-request
-    //   https://github.com/socketio/engine.io-parser/pull/55
-    // - socket.io-client uses the patched engine.io-parser and releases
-    //   https://github.com/socketio/socket.io-client/issues/945
-    const io = require('../../_vendor/patched-socket.io.js');
+  selectStory({kind, story}) {
+    this.setState({selection: {kind, story}});
+  }
 
+  sendInit() {
+    this.socket.send(JSON.stringify({type: 'init', data: {clientType: 'device'}}));
+  }
+
+  sendSetStories() {
+    const stories = this.props.stories.dump();
+    // FIXME this will send stories list to all browser clients
+    //       these clients may or may not re render the list but
+    //       anyways it's best not to send unnecessary messages
+    this.socket.send(JSON.stringify({type: 'setStories', data: {stories}}));
+  }
+
+  handleMessage(message) {
+    switch (message.type) {
+      case 'getStories':
+        this.sendSetStories();
+        break;
+      case 'selectStory':
+        this.selectStory(message.data);
+        break;
+      default:
+        console.error('unknown message type:', message.type, message);
+    }
+  }
+
+  componentDidMount() {
     // new connection
-    this.socket = io(this.props.address, {jsonp: false});
+    this.socket = new WebSocket(this.props.address);
 
     // initial setup
-    this.socket.emit('init', {type: 'device'});
-    this.socket.emit('setStories', {stories: this.props.stories.dump()});
+    this.socket.onopen = () => {
+      this.sendInit();
+      this.sendSetStories();
+    };
 
     // listen for events
-    this.socket.on('getStories', msg => {
-      // FIXME this will send stories list to all browser clients
-      //       these clients may or may not re render the list but
-      //       anyways it's best not to send unnecessary messages
-      this.socket.emit('setStories', {stories: this.props.stories.dump()});
-    });
-    this.socket.on('selectStory', msg => {
-      const {kind, story} = msg;
-      this.setState({selection: {kind, story}});
-    });
+    this.socket.onmessage = (e) => {
+      const message = JSON.parse(e.data);
+      this.handleMessage(message);
+    };
+
+    // an error occurred
+    this.socket.onerror = (e) => {
+      console.warn('websocket connection error', e.message);
+    };
+
+    // connection closed
+    this.socket.onclose = (e) => {
+      console.warn('websocket connection closed', e.code, e.reason);
+    };
 
     // listen for story changes
     this.props.stories.on('change', () => {
-      this.socket.emit('setStories', {stories: this.props.stories.dump()});
+      this.sendSetStories();
     });
   }
 

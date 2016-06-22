@@ -30,11 +30,11 @@ var Preview = function (_Component) {
 
     _classCallCheck(this, Preview);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
+    for (var _len = arguments.length, props = Array(_len), _key = 0; _key < _len; _key++) {
+      props[_key] = arguments[_key];
     }
 
-    var _this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Preview)).call.apply(_Object$getPrototypeO, [this].concat(args)));
+    var _this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Preview)).call.apply(_Object$getPrototypeO, [this].concat(props)));
 
     _this.socket = null;
     _this.state = { selection: null };
@@ -42,42 +42,74 @@ var Preview = function (_Component) {
   }
 
   _createClass(Preview, [{
+    key: 'selectStory',
+    value: function selectStory(_ref) {
+      var kind = _ref.kind;
+      var story = _ref.story;
+
+      this.setState({ selection: { kind: kind, story: story } });
+    }
+  }, {
+    key: 'sendInit',
+    value: function sendInit() {
+      this.socket.send(JSON.stringify({ type: 'init', data: { clientType: 'device' } }));
+    }
+  }, {
+    key: 'sendSetStories',
+    value: function sendSetStories() {
+      var stories = this.props.stories.dump();
+      // FIXME this will send stories list to all browser clients
+      //       these clients may or may not re render the list but
+      //       anyways it's best not to send unnecessary messages
+      this.socket.send(JSON.stringify({ type: 'setStories', data: { stories: stories } }));
+    }
+  }, {
+    key: 'handleMessage',
+    value: function handleMessage(message) {
+      switch (message.type) {
+        case 'getStories':
+          this.sendSetStories();
+          break;
+        case 'selectStory':
+          this.selectStory(message.data);
+          break;
+        default:
+          console.error('unknown message type:', message.type, message);
+      }
+    }
+  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       var _this2 = this;
 
-      // TODO use an official release of socket.io-client instead
-      // used a patched socket-io client until following happens
-      // - engine.io-parser releases a new version after this pull-request
-      //   https://github.com/socketio/engine.io-parser/pull/55
-      // - socket.io-client uses the patched engine.io-parser and releases
-      //   https://github.com/socketio/socket.io-client/issues/945
-      var io = require('../../_vendor/patched-socket.io.js');
-
       // new connection
-      this.socket = io(this.props.address, { jsonp: false });
+      this.socket = new WebSocket(this.props.address);
 
       // initial setup
-      this.socket.emit('init', { type: 'device' });
-      this.socket.emit('setStories', { stories: this.props.stories.dump() });
+      this.socket.onopen = function () {
+        _this2.sendInit();
+        _this2.sendSetStories();
+      };
 
       // listen for events
-      this.socket.on('getStories', function (msg) {
-        // FIXME this will send stories list to all browser clients
-        //       these clients may or may not re render the list but
-        //       anyways it's best not to send unnecessary messages
-        _this2.socket.emit('setStories', { stories: _this2.props.stories.dump() });
-      });
-      this.socket.on('selectStory', function (msg) {
-        var kind = msg.kind;
-        var story = msg.story;
+      this.socket.onmessage = function (e) {
+        var message = JSON.parse(e.data);
+        _this2.handleMessage(message);
+      };
 
-        _this2.setState({ selection: { kind: kind, story: story } });
-      });
+      // an error occurred
+      this.socket.onerror = function (e) {
+        console.warn('websocket connection error', e.message);
+      };
+
+      // connection closed
+      this.socket.onclose = function (e) {
+        console.warn('websocket connection closed', e.code, e.reason);
+      };
 
       // listen for story changes
       this.props.stories.on('change', function () {
-        _this2.socket.emit('setStories', { stories: _this2.props.stories.dump() });
+        _this2.sendSetStories();
       });
     }
   }, {

@@ -47,7 +47,6 @@
     "events": "^1.1.0",
     "express": "^4.14.0",
     "react-dom": "^15.1.0",
-    "socket.io": "^1.4.6",
-    "socket.io-client": "^1.4.6"
+    "ws": "^1.1.0"
   }
 }

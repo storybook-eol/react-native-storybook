@@ -8,5 +8,5 @@ export { storiesOf } from './configure/';
 
 // export the function to generate the preview component
 export function PreviewComponent({port, host = 'localhost'}) {
-  return () => <Preview address={`${host}:${port}`} stories={stories} />;
+  return () => <Preview address={`ws://${host}:${port}`} stories={stories} />;
 }

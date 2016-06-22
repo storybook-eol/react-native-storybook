@@ -40,6 +40,6 @@ function PreviewComponent(_ref) {
   var host = _ref$host === undefined ? 'localhost' : _ref$host;
 
   return function () {
-    return _react2.default.createElement(_Preview2.default, { address: host + ':' + port, stories: _configure2.stories });
+    return _react2.default.createElement(_Preview2.default, { address: 'ws://' + host + ':' + port, stories: _configure2.stories });
   };
 }

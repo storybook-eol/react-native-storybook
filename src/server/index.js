@@ -1,7 +1,7 @@
 import path from 'path';
 import http from 'http';
 import express from 'express';
-import socketio from 'socket.io';
+import ws from 'ws';
 
 //  ------------------------------------------------------------------------  //
 
@@ -11,25 +11,33 @@ app.use(express.static(path.join(__dirname, 'public')));
 //  ------------------------------------------------------------------------  //
 
 const server = http.Server(app);
-const io = socketio(server);
+const wss = ws.Server({server});
 
-io.on('connection', function (socket) {
-  socket.on('init', function (msg) {
-    const clientType = msg.type;
-    socket.join(clientType);
+wss.on('connection', function (socket) {
+  console.log('> new websocket connection');
+  socket.data = {clientType: null};
 
-    // device ==> browser
-    if (clientType === 'device') {
-      ['setStories', 'addAction', 'selectStory', 'applyShortcut'].forEach(type => {
-        socket.on(type, m => io.sockets.in('browser').emit(type, m));
-      });
-    }
+  socket.on('message', function (data) {
+    try {
+      const message = JSON.parse(data);
 
-    // browser ==> device
-    if (clientType === 'browser') {
-      ['getStories', 'selectStory'].forEach(type => {
-        socket.on(type, m => io.sockets.in('device').emit(type, m));
-      });
+      // clients must init first
+      if (!socket.data.clientType) {
+        if (message.type === 'init') {
+          socket.data.clientType = message.data.clientType;
+          console.log(`> initialize new "${socket.data.clientType}"`);
+          return;
+        } else {
+          throw new Error('client must init first');
+        }
+      }
+
+      // forward
+      wss.clients
+        .filter(client => client.data.clientType !== socket.data.clientType)
+        .forEach(client => client.send(data));
+    } catch (e) {
+      socket.close();
     }
   });
 });
