@@ -80,8 +80,6 @@ In order to work with React Native Storybook, one or more devices should be conn
 ### iOS simulator
 
 - Start with `react-native run-ios`
-- Open the debugger menu `CMD+D`
-- Enable remote javascript debugging
 
 ### Android emulator
 
@@ -90,8 +88,6 @@ In order to work with React Native Storybook, one or more devices should be conn
 - Forward port 8081 `adb reverse tcp:8081 tcp:8081`
 - Forward port 9001 `adb reverse tcp:9001 tcp:9001`
 - Start with `react-native run-android`
-- Open the debugger menu `adb shell input keyevent 82`
-- Enable remote javascript debugging
 
 ### Android device
 
@@ -99,5 +95,3 @@ In order to work with React Native Storybook, one or more devices should be conn
 - Forward port 8081 `adb reverse tcp:8081 tcp:8081`
 - Forward port 9001 `adb reverse tcp:9001 tcp:9001`
 - Start with `react-native run-android`
-- Open the debugger menu `adb shell input keyevent 82`
-- Enable remote javascript debugging
