@@ -16,9 +16,9 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
-var _socket = require('socket.io');
+var _ws = require('ws');
 
-var _socket2 = _interopRequireDefault(_socket);
+var _ws2 = _interopRequireDefault(_ws);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30,29 +30,35 @@ app.use(_express2.default.static(_path2.default.join(__dirname, 'public')));
 //  ------------------------------------------------------------------------  //
 
 var server = _http2.default.Server(app);
-var io = (0, _socket2.default)(server);
+var wss = _ws2.default.Server({ server: server });
 
-io.on('connection', function (socket) {
-  socket.on('init', function (msg) {
-    var clientType = msg.type;
-    socket.join(clientType);
+wss.on('connection', function (socket) {
+  console.log('> new websocket connection');
+  socket.data = { clientType: null };
 
-    // device ==> browser
-    if (clientType === 'device') {
-      ['setStories', 'addAction', 'selectStory', 'applyShortcut'].forEach(function (type) {
-        socket.on(type, function (m) {
-          return io.sockets.in('browser').emit(type, m);
-        });
+  socket.on('message', function (data) {
+    try {
+      var message = JSON.parse(data);
+
+      // clients must init first
+      if (!socket.data.clientType) {
+        if (message.type === 'init') {
+          socket.data.clientType = message.data.clientType;
+          console.log('> initialize new "' + socket.data.clientType + '"');
+          return;
+        } else {
+          throw new Error('client must init first');
+        }
+      }
+
+      // forward
+      wss.clients.filter(function (client) {
+        return client.data.clientType !== socket.data.clientType;
+      }).forEach(function (client) {
+        return client.send(data);
       });
-    }
-
-    // browser ==> device
-    if (clientType === 'browser') {
-      ['getStories', 'selectStory'].forEach(function (type) {
-        socket.on(type, function (m) {
-          return io.sockets.in('device').emit(type, m);
-        });
-      });
+    } catch (e) {
+      socket.close();
     }
   });
 });

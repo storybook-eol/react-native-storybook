@@ -1,43 +1,75 @@
 import React from 'react';
-import io from 'socket.io-client';
 import { Provider } from '@kadira/storybook-ui';
 import Preview from './preview';
 
 export default class ReactNativeProvider extends Provider {
   constructor() {
     super();
-    this.socket = io(location.host, {jsonp: false});
-    this.socket.emit('init', {type: 'browser'});
-    this.socket.emit('getStories', {});
+
+    this.socket = new WebSocket(`ws://${location.host}`);
+    this.socket.onopen = () => {
+      this.sendInit();
+      this.sendGetStories();
+    };
   }
 
-  renderPreview(selectedKind, selectedStory) {
-    if (selectedKind && selectedStory) {
-      const selection = {kind: selectedKind, story: selectedStory};
-      this.socket.emit('selectStory', selection);
+  sendInit() {
+    this.socket.send(JSON.stringify({type: 'init', data: {clientType: 'browser'}}));
+  }
+
+  sendGetStories() {
+    this.socket.send(JSON.stringify({type: 'getStories', data: {}}));
+  }
+
+  sendSelectStory(selection) {
+    this.socket.send(JSON.stringify({type: 'selectStory', data: selection}));
+  }
+
+  handleMessage(api, message) {
+    switch (message.type) {
+      case 'addAction':
+        api.addAction(message.data.action);
+        break;
+      case 'setStories':
+        api.setStories(message.data.stories);
+        break;
+      case 'selectStory':
+        api.selectStory(message.data.kind, message.data.story);
+        break;
+      case 'applyShortcut':
+        api.handleShortcut(message.data.event);
+        break;
+      default:
+        console.error('unknown message type:', message.type, message);
     }
-    return <Preview />;
   }
 
   handleAPI(api) {
     api.onStory((kind, story) => {
-      this.socket.emit('selectStory', {kind, story});
+      this.sendSelectStory({kind, story});
     });
 
-    this.socket.on('addAction', msg => {
-      api.addAction(msg.action);
-    });
+    // listen for events
+    this.socket.onmessage = (e) => {
+      const message = JSON.parse(e.data);
+      this.handleMessage(api, message);
+    };
 
-    this.socket.on('setStories', msg => {
-      api.setStories(msg.stories);
-    });
+    // an error occurred
+    this.socket.onerror = (e) => {
+      console.warn('websocket connection error', e.message);
+    };
 
-    this.socket.on('selectStory', msg => {
-      api.selectStory(msg.kind, msg.story);
-    });
+    // connection closed
+    this.socket.onclose = (e) => {
+      console.warn('websocket connection closed', e.code, e.reason);
+    };
+  }
 
-    this.socket.on('applyShortcut', msg => {
-      api.handleShortcut(msg.event);
-    });
+  renderPreview(selectedKind, selectedStory) {
+    if (selectedKind && selectedStory) {
+      this.sendSelectStory({kind: selectedKind, story: selectedStory});
+    }
+    return <Preview />;
   }
 }
