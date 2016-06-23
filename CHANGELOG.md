@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.2.1
+
+- Fix bug where web UI crashes when starting with selection query params [PR #21](https://github.com/kadirahq/react-native-storybook/pull/21).
+
 ## v1.2.0
 
 - Support addons [PR #20](https://github.com/kadirahq/react-native-storybook/pull/20).
