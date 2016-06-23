@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.3.0
+
+- Implement decorators feature [PR #24](https://github.com/kadirahq/react-native-storybook/pull/24).
+
 ## v1.2.1
 
 - Fix bug where web UI crashes when starting with selection query params [PR #21](https://github.com/kadirahq/react-native-storybook/pull/21).
