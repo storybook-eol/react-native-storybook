@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.5.0
+
+- Pass the context variable [PR #26](https://github.com/kadirahq/react-native-storybook/pull/26).
+
 ## v1.4.0
 
 - Implement action logger feature [PR #25](https://github.com/kadirahq/react-native-storybook/pull/25).
