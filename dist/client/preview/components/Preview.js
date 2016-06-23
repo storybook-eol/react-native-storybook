@@ -136,7 +136,9 @@ var Preview = function (_Component) {
       var kind = _state$selection.kind;
       var story = _state$selection.story;
 
-      return this.props.stories.get(kind, story)();
+      var context = { kind: kind, story: story };
+      var getStory = this.props.stories.get(kind, story);
+      return getStory(context);
     }
   }]);
 
