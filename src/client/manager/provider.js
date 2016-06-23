@@ -2,73 +2,83 @@ import React from 'react';
 import { Provider } from '@kadira/storybook-ui';
 import Preview from './preview';
 
+export class Connection {
+  constructor(address) {
+    this._buffer = [];
+    this._socket = new WebSocket(address);
+    this._socket.onopen = this.onopen.bind(this);
+    this._socket.onerror = this.onerror.bind(this);
+    this._socket.onclose = this.onclose.bind(this);
+    this._socket.onmessage = this.onmessage.bind(this);
+    this._handler = Function();
+  }
+
+  setHandler(fn) {
+    this._handler = fn;
+  }
+
+  onopen() {
+    this._buffer.forEach(message => this._socket.send(message));
+  }
+
+  onerror(e) {
+    console.warn('websocket connection error', e.message);
+  }
+
+  onclose(e) {
+    console.warn('websocket connection closed', e.code, e.reason);
+  }
+
+  onmessage(e) {
+    const message = JSON.parse(e.data);
+    this._handler(message.type, message.data);
+  }
+
+  send(type, data) {
+    const message = JSON.stringify({type, data});
+    if (this._socket.readyState === WebSocket.OPEN) {
+      this._socket.send(message);
+    } else {
+      this._buffer.push(message);
+    }
+  }
+}
+
 export default class ReactNativeProvider extends Provider {
   constructor() {
     super();
-
-    this.socket = new WebSocket(`ws://${location.host}`);
-    this.socket.onopen = () => {
-      this.sendInit();
-      this.sendGetStories();
-    };
-  }
-
-  sendInit() {
-    this.socket.send(JSON.stringify({type: 'init', data: {clientType: 'browser'}}));
-  }
-
-  sendGetStories() {
-    this.socket.send(JSON.stringify({type: 'getStories', data: {}}));
-  }
-
-  sendSelectStory(selection) {
-    this.socket.send(JSON.stringify({type: 'selectStory', data: selection}));
-  }
-
-  handleMessage(api, message) {
-    switch (message.type) {
-      case 'addAction':
-        api.addAction(message.data.action);
-        break;
-      case 'setStories':
-        api.setStories(message.data.stories);
-        break;
-      case 'selectStory':
-        api.selectStory(message.data.kind, message.data.story);
-        break;
-      case 'applyShortcut':
-        api.handleShortcut(message.data.event);
-        break;
-      default:
-        console.error('unknown message type:', message.type, message);
-    }
+    this.conn = new Connection(`ws://${location.host}`);
+    this.conn.send('init', {clientType: 'browser'});
+    this.conn.send('getStories', {});
   }
 
   handleAPI(api) {
     api.onStory((kind, story) => {
-      this.sendSelectStory({kind, story});
+      this.conn.send('selectStory', {kind, story});
     });
 
-    // listen for events
-    this.socket.onmessage = (e) => {
-      const message = JSON.parse(e.data);
-      this.handleMessage(api, message);
-    };
-
-    // an error occurred
-    this.socket.onerror = (e) => {
-      console.warn('websocket connection error', e.message);
-    };
-
-    // connection closed
-    this.socket.onclose = (e) => {
-      console.warn('websocket connection closed', e.code, e.reason);
-    };
+    // listen for events from connection
+    this.conn.setHandler((type, data) => {
+      switch (type) {
+        case 'addAction':
+          api.addAction(data.action);
+          break;
+        case 'setStories':
+          api.setStories(data.stories);
+          break;
+        case 'selectStory':
+          api.selectStory(data.kind, data.story);
+          break;
+        default:
+          console.error('unknown message type:', type);
+      }
+    });
   }
 
   renderPreview(selectedKind, selectedStory) {
     if (selectedKind && selectedStory) {
-      this.sendSelectStory({kind: selectedKind, story: selectedStory});
+      const selection = {kind: selectedKind, story: selectedStory};
+      this.conn.send('selectStory', selection);
     }
     return <Preview />;
   }
