@@ -9,15 +9,21 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ClientApi = function () {
-  function ClientApi(stories) {
+  function ClientApi(actions, stories) {
     _classCallCheck(this, ClientApi);
 
+    this._actions = actions;
     this._stories = stories;
     this._addons = {};
     this._decorators = [];
   }
 
   _createClass(ClientApi, [{
+    key: 'action',
+    value: function action(name) {
+      return this._actions.newAction(name);
+    }
+  }, {
     key: 'addDecorator',
     value: function addDecorator(decorator) {
       this._decorators.push(decorator);

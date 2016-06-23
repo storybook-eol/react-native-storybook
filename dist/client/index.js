@@ -3,10 +3,16 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.storiesOf = exports.configure = exports.setAddon = exports.addDecorator = undefined;
+exports.storiesOf = exports.configure = exports.setAddon = exports.addDecorator = exports.action = undefined;
 
 var _configure = require('./configure/');
 
+Object.defineProperty(exports, 'action', {
+  enumerable: true,
+  get: function get() {
+    return _configure.action;
+  }
+});
 Object.defineProperty(exports, 'addDecorator', {
   enumerable: true,
   get: function get() {
@@ -52,6 +58,6 @@ function PreviewComponent(_ref) {
   var host = _ref$host === undefined ? 'localhost' : _ref$host;
 
   return function () {
-    return _react2.default.createElement(_Preview2.default, { address: 'ws://' + host + ':' + port, stories: _configure2.stories });
+    return _react2.default.createElement(_Preview2.default, { address: 'ws://' + host + ':' + port, stories: _configure2.stories, actions: _configure2.actions });
   };
 }
