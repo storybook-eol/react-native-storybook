@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.storiesOf = exports.configure = undefined;
+exports.setAddon = exports.storiesOf = exports.configure = undefined;
 
 var _configure = require('./configure/');
 
@@ -17,6 +17,12 @@ Object.defineProperty(exports, 'storiesOf', {
   enumerable: true,
   get: function get() {
     return _configure.storiesOf;
+  }
+});
+Object.defineProperty(exports, 'setAddon', {
+  enumerable: true,
+  get: function get() {
+    return _configure.setAddon;
   }
 });
 exports.PreviewComponent = PreviewComponent;

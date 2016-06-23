@@ -3,35 +3,21 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.stories = undefined;
-exports.configure = configure;
-exports.storiesOf = storiesOf;
+exports.setAddon = exports.storiesOf = exports.configure = exports.client = exports.stories = undefined;
 
 var _store = require('./store');
 
 var _store2 = _interopRequireDefault(_store);
 
+var _client = require('./client');
+
+var _client2 = _interopRequireDefault(_client);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var stories = exports.stories = new _store2.default();
+var client = exports.client = new _client2.default(stories);
 
-//
-function configure(loaders, module) {
-  loaders();
-
-  if (module.hot) {
-    module.hot.accept(function () {
-      stories.emit('change');
-    });
-  }
-}
-
-//
-function storiesOf(kind) {
-  var api = {};
-  api.add = function (story, fn) {
-    stories.add(kind, story, fn);
-    return api;
-  };
-  return api;
-}
+var configure = exports.configure = client.configure.bind(client);
+var storiesOf = exports.storiesOf = client.storiesOf.bind(client);
+var setAddon = exports.setAddon = client.setAddon.bind(client);
