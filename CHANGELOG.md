@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.4.0
+
+- Implement action logger feature [PR #25](https://github.com/kadirahq/react-native-storybook/pull/25).
+
 ## v1.3.0
 
 - Implement decorators feature [PR #24](https://github.com/kadirahq/react-native-storybook/pull/24).
