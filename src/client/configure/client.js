@@ -1,8 +1,13 @@
 export default class ClientApi {
-  constructor(stories) {
+  constructor(actions, stories) {
+    this._actions = actions;
     this._stories = stories;
     this._addons = {};
     this._decorators = [];
+  }
+
+  action(name) {
+    return this._actions.newAction(name);
   }
 
   addDecorator(decorator) {

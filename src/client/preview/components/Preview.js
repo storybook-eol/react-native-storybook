@@ -21,6 +21,10 @@ export default class Preview extends Component {
     this.socket.send(JSON.stringify({type: 'init', data: {clientType: 'device'}}));
   }
 
+  sendAddAction(action) {
+    this.socket.send(JSON.stringify({type: 'addAction', data: {action}}));
+  }
+
   sendSetStories() {
     const stories = this.props.stories.dump();
     // FIXME this will send stories list to all browser clients
@@ -71,6 +75,11 @@ export default class Preview extends Component {
     // listen for story changes
     this.props.stories.on('change', () => {
       this.sendSetStories();
+    });
+
+    // listen for action triggers
+    this.props.actions.on('action', action => {
+      this.sendAddAction(action);
     });
   }
 

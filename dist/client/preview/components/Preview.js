@@ -55,6 +55,11 @@ var Preview = function (_Component) {
       this.socket.send(JSON.stringify({ type: 'init', data: { clientType: 'device' } }));
     }
   }, {
+    key: 'sendAddAction',
+    value: function sendAddAction(action) {
+      this.socket.send(JSON.stringify({ type: 'addAction', data: { action: action } }));
+    }
+  }, {
     key: 'sendSetStories',
     value: function sendSetStories() {
       var stories = this.props.stories.dump();
@@ -110,6 +115,11 @@ var Preview = function (_Component) {
       // listen for story changes
       this.props.stories.on('change', function () {
         _this2.sendSetStories();
+      });
+
+      // listen for action triggers
+      this.props.actions.on('action', function (action) {
+        _this2.sendAddAction(action);
       });
     }
   }, {
