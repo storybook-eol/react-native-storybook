@@ -3,10 +3,22 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.setAddon = exports.storiesOf = exports.configure = undefined;
+exports.storiesOf = exports.configure = exports.setAddon = exports.addDecorator = undefined;
 
 var _configure = require('./configure/');
 
+Object.defineProperty(exports, 'addDecorator', {
+  enumerable: true,
+  get: function get() {
+    return _configure.addDecorator;
+  }
+});
+Object.defineProperty(exports, 'setAddon', {
+  enumerable: true,
+  get: function get() {
+    return _configure.setAddon;
+  }
+});
 Object.defineProperty(exports, 'configure', {
   enumerable: true,
   get: function get() {
@@ -17,12 +29,6 @@ Object.defineProperty(exports, 'storiesOf', {
   enumerable: true,
   get: function get() {
     return _configure.storiesOf;
-  }
-});
-Object.defineProperty(exports, 'setAddon', {
-  enumerable: true,
-  get: function get() {
-    return _configure.setAddon;
   }
 });
 exports.PreviewComponent = PreviewComponent;
