@@ -88,6 +88,8 @@ export default class Preview extends Component {
       return <CenteredText>Welcome to Storybook!</CenteredText>
     }
     const {kind, story} = this.state.selection;
-    return this.props.stories.get(kind, story)();
+    const context = {kind, story};
+    const getStory = this.props.stories.get(kind, story);
+    return getStory(context);
   }
 }
