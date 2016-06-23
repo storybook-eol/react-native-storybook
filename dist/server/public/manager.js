@@ -34558,6 +34558,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.Connection = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -34573,11 +34574,69 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Connection = exports.Connection = function () {
+	  function Connection(address) {
+	    _classCallCheck(this, Connection);
+
+	    this._buffer = [];
+	    this._socket = new WebSocket(address);
+	    this._socket.onopen = this.onopen.bind(this);
+	    this._socket.onerror = this.onerror.bind(this);
+	    this._socket.onclose = this.onclose.bind(this);
+	    this._socket.onmessage = this.onmessage.bind(this);
+	    this._handler = Function();
+	  }
+
+	  _createClass(Connection, [{
+	    key: 'setHandler',
+	    value: function setHandler(fn) {
+	      this._handler = fn;
+	    }
+	  }, {
+	    key: 'onopen',
+	    value: function onopen() {
+	      var _this = this;
+
+	      this._buffer.forEach(function (message) {
+	        return _this._socket.send(message);
+	      });
+	    }
+	  }, {
+	    key: 'onerror',
+	    value: function onerror(e) {
+	      console.warn('websocket connection error', e.message);
+	    }
+	  }, {
+	    key: 'onclose',
+	    value: function onclose(e) {
+	      console.warn('websocket connection closed', e.code, e.reason);
+	    }
+	  }, {
+	    key: 'onmessage',
+	    value: function onmessage(e) {
+	      var message = JSON.parse(e.data);
+	      this._handler(message.type, message.data);
+	    }
+	  }, {
+	    key: 'send',
+	    value: function send(type, data) {
+	      var message = JSON.stringify({ type: type, data: data });
+	      if (this._socket.readyState === WebSocket.OPEN) {
+	        this._socket.send(message);
+	      } else {
+	        this._buffer.push(message);
+	      }
+	    }
+	  }]);
+
+	  return Connection;
+	}();
 
 	var ReactNativeProvider = function (_Provider) {
 	  _inherits(ReactNativeProvider, _Provider);
@@ -34585,81 +34644,46 @@
 	  function ReactNativeProvider() {
 	    _classCallCheck(this, ReactNativeProvider);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactNativeProvider).call(this));
+	    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactNativeProvider).call(this));
 
-	    _this.socket = new WebSocket('ws://' + location.host);
-	    _this.socket.onopen = function () {
-	      _this.sendInit();
-	      _this.sendGetStories();
-	    };
-	    return _this;
+	    _this2.conn = new Connection('ws://' + location.host);
+	    _this2.conn.send('init', { clientType: 'browser' });
+	    _this2.conn.send('getStories', {});
+	    return _this2;
 	  }
 
 	  _createClass(ReactNativeProvider, [{
-	    key: 'sendInit',
-	    value: function sendInit() {
-	      this.socket.send(JSON.stringify({ type: 'init', data: { clientType: 'browser' } }));
-	    }
-	  }, {
-	    key: 'sendGetStories',
-	    value: function sendGetStories() {
-	      this.socket.send(JSON.stringify({ type: 'getStories', data: {} }));
-	    }
-	  }, {
-	    key: 'sendSelectStory',
-	    value: function sendSelectStory(selection) {
-	      this.socket.send(JSON.stringify({ type: 'selectStory', data: selection }));
-	    }
-	  }, {
-	    key: 'handleMessage',
-	    value: function handleMessage(api, message) {
-	      switch (message.type) {
-	        case 'addAction':
-	          api.addAction(message.data.action);
-	          break;
-	        case 'setStories':
-	          api.setStories(message.data.stories);
-	          break;
-	        case 'selectStory':
-	          api.selectStory(message.data.kind, message.data.story);
-	          break;
-	        case 'applyShortcut':
-	          api.handleShortcut(message.data.event);
-	          break;
-	        default:
-	          console.error('unknown message type:', message.type, message);
-	      }
-	    }
-	  }, {
 	    key: 'handleAPI',
 	    value: function handleAPI(api) {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      api.onStory(function (kind, story) {
-	        _this2.sendSelectStory({ kind: kind, story: story });
+	        _this3.conn.send('selectStory', { kind: kind, story: story });
 	      });
 
-	      // listen for events
-	      this.socket.onmessage = function (e) {
-	        var message = JSON.parse(e.data);
-	        _this2.handleMessage(api, message);
-	      };
-
-	      // an error occurred
-	      this.socket.onerror = function (e) {
-	        console.warn('websocket connection error', e.message);
-	      };
-
-	      // connection closed
-	      this.socket.onclose = function (e) {
-	        console.warn('websocket connection closed', e.code, e.reason);
-	      };
+	      // listen for events from connection
+	      this.conn.setHandler(function (type, data) {
+	        switch (type) {
+	          case 'addAction':
+	            api.addAction(data.action);
+	            break;
+	          case 'setStories':
+	            api.setStories(data.stories);
+	            break;
+	          case 'selectStory':
+	            api.selectStory(data.kind, data.story);
+	            break;
+	          default:
+	            console.error('unknown message type:', type);
+	        }
+	      });
 	    }
 	  }, {
 	    key: 'renderPreview',
 	    value: function renderPreview(selectedKind, selectedStory) {
 	      if (selectedKind && selectedStory) {
-	        this.sendSelectStory({ kind: selectedKind, story: selectedStory });
+	        var selection = { kind: selectedKind, story: selectedStory };
+	        this.conn.send('selectStory', selection);
 	      }
 	      return _react2.default.createElement(_preview2.default, null);
 	    }
