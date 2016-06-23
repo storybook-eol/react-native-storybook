@@ -14,9 +14,15 @@ var ClientApi = function () {
 
     this._stories = stories;
     this._addons = {};
+    this._decorators = [];
   }
 
   _createClass(ClientApi, [{
+    key: 'addDecorator',
+    value: function addDecorator(decorator) {
+      this._decorators.push(decorator);
+    }
+  }, {
     key: 'setAddon',
     value: function setAddon(addon) {
       Object.assign(this._addons, addon);
@@ -36,7 +42,7 @@ var ClientApi = function () {
   }, {
     key: 'storiesOf',
     value: function storiesOf(kind) {
-      return new KindApi(this._stories, this._addons, kind);
+      return new KindApi(this._stories, this._addons, this._decorators, kind);
     }
   }]);
 
@@ -46,19 +52,38 @@ var ClientApi = function () {
 exports.default = ClientApi;
 
 var KindApi = exports.KindApi = function () {
-  function KindApi(stories, addons, kind) {
+  function KindApi(stories, addons, decorators, kind) {
     _classCallCheck(this, KindApi);
 
     this.kind = kind;
     this._stories = stories;
+    this._decorators = decorators.slice();
     Object.assign(this, addons);
   }
 
   _createClass(KindApi, [{
+    key: 'addDecorator',
+    value: function addDecorator(decorator) {
+      this._decorators.push(decorator);
+    }
+  }, {
     key: 'add',
     value: function add(story, fn) {
-      this._stories.add(this.kind, story, fn);
+      var decorated = this._decorate(fn);
+      this._stories.add(this.kind, story, decorated);
       return this;
+    }
+  }, {
+    key: '_decorate',
+    value: function _decorate(fn) {
+      return this._decorators.reduce(function (decorated, decorator) {
+        return function (context) {
+          var _fn = function _fn() {
+            return decorated(context);
+          };
+          return decorator(_fn, context);
+        };
+      }, fn);
     }
   }]);
 
