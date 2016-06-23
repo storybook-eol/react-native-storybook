@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.1.4
+
+- Add missing `module` argument to template [PR #18](https://github.com/kadirahq/react-native-storybook/pull/18).
+
 ## v1.1.3
 
 - Remove socket.io and use plain Websockets [PR #17](https://github.com/kadirahq/react-native-storybook/pull/17). Removes JS debugging requirement.
