@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.1.5
+
+- Support addons [PR #20](https://github.com/kadirahq/react-native-storybook/pull/20).
+
 ## v1.1.4
 
 - Add missing `module` argument to template [PR #18](https://github.com/kadirahq/react-native-storybook/pull/18).
