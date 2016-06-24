@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import shell from 'shelljs';
 import program from 'commander';
 import server from '../server';
 
@@ -22,6 +23,17 @@ program
       const address = `http://${env.host || 'localhost'}:${env.port}/`;
       logger.info(`\nStorybook server started on => ${address}\n`);
     })
+  });
+
+program
+  .command('run-ios')
+  .option('-a, --appname <appname>', 'storybook application name eg. "MyAppStorybook"')
+  .option('-i, --identifier <identifier>', 'storybook application identifier eg. "org.mycompany.MyAppStorybook"')
+  .description('starts react native storybook ios simulator')
+  .action(function(env) {
+    shell.exec(`react-native run-ios --scheme=${env.appname}`);
+    shell.exec(`xcrun simctl install booted ios/build/Build/Products/Debug-iphonesimulator/${env.appname}.app`);
+    shell.exec(`xcrun simctl launch booted ${env.identifier}`);
   });
 
 program

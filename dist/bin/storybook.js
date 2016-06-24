@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 'use strict';
 
+var _shelljs = require('shelljs');
+
+var _shelljs2 = _interopRequireDefault(_shelljs);
+
 var _commander = require('commander');
 
 var _commander2 = _interopRequireDefault(_commander);
@@ -24,6 +28,12 @@ _commander2.default.command('start [platform]').option('-h, --host <host>', 'hos
     var address = 'http://' + (env.host || 'localhost') + ':' + env.port + '/';
     logger.info('\nStorybook server started on => ' + address + '\n');
   });
+});
+
+_commander2.default.command('run-ios').option('-a, --appname <appname>', 'storybook application name eg. "MyAppStorybook"').option('-i, --identifier <identifier>', 'storybook application identifier eg. "org.mycompany.MyAppStorybook"').description('starts react native storybook ios simulator').action(function (env) {
+  _shelljs2.default.exec('react-native run-ios --scheme=' + env.appname);
+  _shelljs2.default.exec('xcrun simctl install booted ios/build/Build/Products/Debug-iphonesimulator/' + env.appname + '.app');
+  _shelljs2.default.exec('xcrun simctl launch booted ' + env.identifier);
 });
 
 _commander2.default.parse(process.argv);
