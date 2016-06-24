@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.6.0
+
+- Add run-ios command [PR #27](https://github.com/kadirahq/react-native-storybook/pull/27).
+
 ## v1.5.0
 
 - Pass the context variable [PR #26](https://github.com/kadirahq/react-native-storybook/pull/26).
