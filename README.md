@@ -2,7 +2,7 @@
 
 With React Native Storybook you can design and develop individual React Native components without running your application.
 
-![React Storybook Screenshot](docs/screenshot.png)
+![React Storybook Screenshot](docs/assets/readme/screenshot.png)
 
 ## Installing Storybook
 
@@ -70,8 +70,8 @@ There are a couple of drawbacks with the previous method.
 
 React Native Storybook can be run without making changes to your *index.__.js* files but it'll take a few minutes to set it up.
 
-- [Setup React Native Storybook with iOS](#)
-- [Setup React Native Storybook with Android](#)
+- [Setup React Native Storybook with iOS](docs/setup-ios.md)
+- [Setup React Native Storybook with Android](docs/setup-android.md)
 
 ## Connecting Devices
 
