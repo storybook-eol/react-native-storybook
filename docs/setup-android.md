@@ -1,3 +1,3 @@
-# Setup Story book for Android
+# Setup Storybook for Android
 
 > TODO
