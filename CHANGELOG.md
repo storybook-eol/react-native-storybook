@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.7.1
+
+* Make the getting started process simple.
+
 ## v1.7.0
 
 - Minify the manager build to around 350 KB with UglifyJs support.
