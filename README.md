@@ -75,7 +75,7 @@ React Native Storybook can be run without making changes to your *index.__.js* f
 
 ## Connecting Devices
 
-In order to work with React Native Storybook, one or more devices should be connected. Stories will only show when devices are available. At the moment, remote javascript debugging should also be enabled for storybook to work [#3](https://github.com/kadirahq/react-native-storybook/issues/3).
+In order to work with React Native Storybook, one or more devices should be connected. Stories will only show when devices are available.
 
 ### iOS simulator
 
