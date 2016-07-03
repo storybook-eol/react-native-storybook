@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.7.0
+
+- Minify the manager build to around 350 KB with UglifyJs support.
+
 ## v1.6.0
 
 - Add run-ios command [PR #27](https://github.com/kadirahq/react-native-storybook/pull/27).
