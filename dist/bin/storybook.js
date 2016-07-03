@@ -36,4 +36,9 @@ _commander2.default.command('run-ios').option('-a, --appname <appname>', 'storyb
   _shelljs2.default.exec('xcrun simctl launch booted ' + env.identifier);
 });
 
+_commander2.default.command('run-android').option('-i, --identifier <identifier>', 'storybook application id eg. "com.myapplication.storybook"').description('starts react native storybook on android simulator').action(function (env) {
+  _shelljs2.default.exec('react-native run-android --variant=storybook');
+  _shelljs2.default.exec('adb shell monkey -p ' + env.identifier + ' 1');
+});
+
 _commander2.default.parse(process.argv);
