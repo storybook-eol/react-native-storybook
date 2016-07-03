@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.7.2
+
+* Update README related to HMR usage.
+
 ## v1.7.1
 
 * Make the getting started process simple.
