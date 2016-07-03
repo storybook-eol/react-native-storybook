@@ -11,6 +11,9 @@ export { configure } from './configure/';
 export { storiesOf } from './configure/';
 
 // export the function to generate the preview component
-export function PreviewComponent({port, host = 'localhost'}) {
+export function StorybookUI({port, host = 'localhost'}) {
   return () => <Preview address={`ws://${host}:${port}`} stories={stories} actions={actions} />;
 }
+
+// for the backward compatibility
+export const PreviewComponent = StorybookUI;

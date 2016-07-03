@@ -1,74 +1,100 @@
 # React Native Storybook
 
-With React Native Storybook you can design and develop individual React Native components without running your application.
+With React Native Storybook you can design and develop individual React Native components without running your app.
 
 ![React Storybook Screenshot](docs/assets/readme/screenshot.png)
 
-## Installing Storybook
+## Getting Started
 
-First, install the package from the *npm* registry and copy initial set of files
+First, install the `@kadira/react-native-storybook` into your project.
 
 ```shell
 npm i -D @kadira/react-native-storybook
-cp -r ./node_modules/@kadira/react-native-storybook/assets/template ./storybook
 ```
 
-Edit *index.ios.js* file and the *index.android.js* file to set your root component name when calling `AppRegistry.registerComponent`. And add the storybook npm script to the *scripts* section of your *package.json* file.
+Then render our `StorybookUI` component as the root component by editing your `index.ios.js` or `index.android.js` file as shown follow:
 
-```json
-{
-  "start": "node node_modules/react-native/local-cli/cli.js start",
-  "storybook": "storybook start -p 9001"
-}
+```js
+import { AppRegistry } from 'react-native';
+import { StorybookUI } from '@kadira/react-native-storybook';
+
+// import your stories
+import "src/stories";
+
+AppRegistry.registerComponent('YOUR_PROJECT_NAME', function () {
+  // You can also render the StorybookUI component anywhere you like.
+  return StorybookUI({port: 9001, host: 'localhost'});
+});
 ```
 
-## Writing Storybook Stories
+Then write your first story in the `src/stories/` directory like this:
 
-Now you can write stories to preview and interact with your components. These story files can be placed almost anywhere within your project directory.
+```js
+// index.js
 
-```jsx
 import React from 'react';
 import { storiesOf } from '@kadira/react-native-storybook';
-import ExampleComponent from '../../components/ExampleComponent';
+import { View, Text } from 'react-native';
 
-storiesOf('ExampleComponent')
-  .add('First Story', () => (
-    <ExampleComponent foo="bar">First Story</ExampleComponent>
+const style = {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: '#F5FCFF'
+};
+
+const CenteredView = (props) => (
+  <View style={style}>
+    {props.children}
+  </View>
+);
+
+storiesOf('CenteredView')
+  .add('default view', () => (
+    <CenteredView>
+      <Text>Hello Storybook</Text>
+    </CenteredView>
   ));
 ```
 
-After writing stories, they must be imported into the storybook by requiring them inside the *storybook/config.js* file. Check the [react-native-button](https://github.com/kadira-samples/react-native-button) repo for an example.
+Then add following NPM script into your `package.json` file:
 
-## Starting Storybook (fast)
-
-The fastest way to start storybook is to temporarily load it from your main `index.ios.js` and `index.android.js` files. When you want to run the storybook insert this line and comment out the rest of the file.
-
-```javascript
-import './storybook';
+```js
+{
+  "scripts": {
+    ...
+    "storybook": "storybook start -p 9001"
+    ...
+  }
+}
 ```
 
-Start the react-native debug server
+After that run the storybook server like this:
 
-```shell
-npm run start
 ```
-
-Start the storybook server
-
-```shell
 npm run storybook
 ```
 
-And start your android/ios device or simulator. Stories will appear on http://localhost:9001 as soon as your device connects successfully.
+> This will start the storybook server at port: 9001
 
-## Starting Storybook (advanced)
+Finally, you can run your app as usually.
+
+```
+react-native run-ios
+# or
+react-native run-android
+```
+
+Now, you can open <http://localhost:9001> to access your stories.
+
+## Running storybook as a separate app
 
 There are a couple of drawbacks with the previous method.
 
 - Both your react native application and the storybook use the same app name. Because of this, only one of them can exist on a device at any given moment.
-- Should edit *index.__.js* files when switching between the app and the storybook.
+- Should edit `index.__.js` files when switching between the app and the storybook.
 
-React Native Storybook can be run without making changes to your *index.__.js* files but it'll take a few minutes to set it up.
+React Native Storybook can be run without making changes to your `index.__.js` files. It has few more steps, but you can setup in few minutes.
 
 - [Setup React Native Storybook with iOS](docs/setup-ios.md)
 - [Setup React Native Storybook with Android](docs/setup-android.md)
