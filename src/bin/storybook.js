@@ -37,4 +37,13 @@ program
   });
 
 program
+  .command('run-android')
+  .option('-i, --identifier <identifier>', 'storybook application id eg. "com.myapplication.storybook"')
+  .description('starts react native storybook on android simulator')
+  .action(function(env) {
+    shell.exec(`react-native run-android --variant=storybook`);
+    shell.exec(`adb shell monkey -p ${env.identifier} 1`);
+  });
+
+program
   .parse(process.argv);
