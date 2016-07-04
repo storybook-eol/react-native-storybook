@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PreviewComponent = exports.storiesOf = exports.configure = exports.setAddon = exports.addDecorator = exports.action = undefined;
+exports.StorybookUI = exports.PreviewComponent = exports.storiesOf = exports.configure = exports.setAddon = exports.addDecorator = exports.action = undefined;
 
 var _configure = require('./configure/');
 
@@ -37,7 +37,7 @@ Object.defineProperty(exports, 'storiesOf', {
     return _configure.storiesOf;
   }
 });
-exports.StorybookUI = StorybookUI;
+exports.getStorybookUI = getStorybookUI;
 
 var _react = require('react');
 
@@ -52,7 +52,7 @@ var _configure2 = require('./configure');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // export the function to generate the preview component
-function StorybookUI(_ref) {
+function getStorybookUI(_ref) {
   var port = _ref.port;
   var _ref$host = _ref.host;
   var host = _ref$host === undefined ? 'localhost' : _ref$host;
@@ -63,4 +63,5 @@ function StorybookUI(_ref) {
 }
 
 // for the backward compatibility
-var PreviewComponent = exports.PreviewComponent = StorybookUI;
+var PreviewComponent = exports.PreviewComponent = getStorybookUI;
+var StorybookUI = exports.StorybookUI = getStorybookUI;
