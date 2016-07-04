@@ -16,7 +16,7 @@ Then render our `StorybookUI` component as the root component by editing your `i
 
 ```js
 import { AppRegistry } from 'react-native';
-import { StorybookUI, configure } from '@kadira/react-native-storybook';
+import { getStorybookUI, configure } from '@kadira/react-native-storybook';
 
 // import your stories
 configure(() => {
@@ -25,7 +25,8 @@ configure(() => {
 
 AppRegistry.registerComponent('YOUR_PROJECT_NAME', function () {
   // You can also render the StorybookUI component anywhere you like.
-  return StorybookUI({port: 9001, host: 'localhost'});
+  const StorybookUI = getStorybookUI({port: 9001, host: 'localhost'});
+  return StorybookUI;
 });
 ```
 
