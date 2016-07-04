@@ -21,13 +21,10 @@ import { getStorybookUI, configure } from '@kadira/react-native-storybook';
 // import your stories
 configure(() => {
   require('./src/stories');
-}, module)
+}, module);
 
-AppRegistry.registerComponent('YOUR_PROJECT_NAME', function () {
-  // You can also render the StorybookUI component anywhere you like.
-  const StorybookUI = getStorybookUI({port: 9001, host: 'localhost'});
-  return StorybookUI;
-});
+const StorybookUI = getStorybookUI({port: 9001, host: 'localhost'});
+AppRegistry.registerComponent('RnHello', () => StorybookUI);
 ```
 
 Then write your first story in the `src/stories/` directory like this:
