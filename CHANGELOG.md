@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.8.0
+
+* Introduce getStorybookUI method to get the UI component class.
+
 ## v1.7.2
 
 * Update README related to HMR usage.
