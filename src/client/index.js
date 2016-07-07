@@ -11,8 +11,18 @@ export { configure } from './configure/';
 export { storiesOf } from './configure/';
 
 // export the function to generate the preview component
-export function getStorybookUI({port, host = 'localhost'}) {
-  return () => <Preview address={`ws://${host}:${port}`} stories={stories} actions={actions} />;
+export function getStorybookUI(_config) {
+  let config = _config;
+
+  // NOTE: for backward compatibility
+  if (config.host || config.port) {
+    config.channel = config.channel || {
+      type: 'websocket',
+      options: { address: `ws://${config.host}:${config.port}` },
+    };
+  }
+
+  return () => <Preview config={config} stories={stories} actions={actions} />;
 }
 
 // for the backward compatibility
