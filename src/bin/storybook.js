@@ -2,10 +2,7 @@
 
 import shell from 'shelljs';
 import program from 'commander';
-import server from '../server';
-
-// avoid eslint errors
-const logger = console;
+import startServer from '../server';
 
 //  ------------------------------------------------------------------------  //
 
@@ -18,11 +15,8 @@ program
   .option('-p, --port <port>', 'port to listen on', parseInt)
   .description('starts react native storybook')
   .action(function(platform, env) {
-    server.listen(env.port, env.host, function (err) {
-      if (err) throw err;
-      const address = `http://${env.host || 'localhost'}:${env.port}/`;
-      logger.info(`\nStorybook server started on => ${address}\n`);
-    })
+    // listen on localhost if a host name is not given
+    startServer(env.port, env.host || 'localhost', {});
   });
 
 program

@@ -52,13 +52,19 @@ var _configure2 = require('./configure');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // export the function to generate the preview component
-function getStorybookUI(_ref) {
-  var port = _ref.port;
-  var _ref$host = _ref.host;
-  var host = _ref$host === undefined ? 'localhost' : _ref$host;
+function getStorybookUI(_config) {
+  var config = _config;
+
+  // NOTE: for backward compatibility
+  if (config.host || config.port) {
+    config.channel = config.channel || {
+      type: 'websocket',
+      options: { address: 'ws://' + config.host + ':' + config.port }
+    };
+  }
 
   return function () {
-    return _react2.default.createElement(_Preview2.default, { address: 'ws://' + host + ':' + port, stories: _configure2.stories, actions: _configure2.actions });
+    return _react2.default.createElement(_Preview2.default, { config: config, stories: _configure2.stories, actions: _configure2.actions });
   };
 }
 

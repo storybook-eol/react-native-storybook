@@ -10,6 +10,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _channel = require('../../shared/channel');
+
+var _channel2 = _interopRequireDefault(_channel);
+
 var _CenteredText = require('./CenteredText');
 
 var _CenteredText2 = _interopRequireDefault(_CenteredText);
@@ -25,102 +29,61 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Preview = function (_Component) {
   _inherits(Preview, _Component);
 
-  function Preview() {
+  function Preview(props) {
     var _Object$getPrototypeO;
 
     _classCallCheck(this, Preview);
 
-    for (var _len = arguments.length, props = Array(_len), _key = 0; _key < _len; _key++) {
-      props[_key] = arguments[_key];
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
     }
 
-    var _this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Preview)).call.apply(_Object$getPrototypeO, [this].concat(props)));
+    var _this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Preview)).call.apply(_Object$getPrototypeO, [this, props].concat(args)));
 
-    _this.socket = null;
     _this.state = { selection: null };
+    _this._channel = (0, _channel2.default)(props.config.channel);
+    _this._channel.on('getStories', function (d) {
+      return _this.sendSetStories();
+    });
+    _this._channel.on('selectStory', function (d) {
+      return _this.selectStory(d);
+    });
+    props.stories.on('change', function () {
+      return _this.sendSetStories();
+    });
+    props.actions.on('action', function (action) {
+      return _this.sendAddAction(action);
+    });
+    _this.sendInit();
+    _this.sendSetStories();
     return _this;
   }
 
   _createClass(Preview, [{
     key: 'selectStory',
-    value: function selectStory(_ref) {
-      var kind = _ref.kind;
-      var story = _ref.story;
-
-      this.setState({ selection: { kind: kind, story: story } });
+    value: function selectStory(selection) {
+      this.setState({ selection: selection });
     }
   }, {
     key: 'sendInit',
     value: function sendInit() {
-      this.socket.send(JSON.stringify({ type: 'init', data: { clientType: 'device' } }));
+      this._channel.send('init', { clientType: 'device' });
     }
   }, {
     key: 'sendAddAction',
     value: function sendAddAction(action) {
-      this.socket.send(JSON.stringify({ type: 'addAction', data: { action: action } }));
+      this._channel.send('addAction', { action: action });
     }
   }, {
     key: 'sendSetStories',
     value: function sendSetStories() {
       var stories = this.props.stories.dump();
-      // FIXME this will send stories list to all browser clients
-      //       these clients may or may not re render the list but
-      //       anyways it's best not to send unnecessary messages
-      this.socket.send(JSON.stringify({ type: 'setStories', data: { stories: stories } }));
-    }
-  }, {
-    key: 'handleMessage',
-    value: function handleMessage(message) {
-      switch (message.type) {
-        case 'getStories':
-          this.sendSetStories();
-          break;
-        case 'selectStory':
-          this.selectStory(message.data);
-          break;
-        default:
-          console.error('unknown message type:', message.type, message);
-      }
+      this._channel.send('setStories', { stories: stories });
     }
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this2 = this;
-
-      // new connection
-      this.socket = new WebSocket(this.props.address);
-
-      // initial setup
-      this.socket.onopen = function () {
-        _this2.sendInit();
-        _this2.sendSetStories();
-      };
-
-      // listen for events
-      this.socket.onmessage = function (e) {
-        var message = JSON.parse(e.data);
-        _this2.handleMessage(message);
-      };
-
-      // an error occurred
-      this.socket.onerror = function (e) {
-        console.warn('websocket connection error', e.message);
-      };
-
-      // connection closed
-      this.socket.onclose = function (e) {
-        console.warn('websocket connection closed', e.code, e.reason);
-      };
-
-      // listen for story changes
-      this.props.stories.on('change', function () {
-        _this2.sendSetStories();
-      });
-
-      // listen for action triggers
-      this.props.actions.on('action', function (action) {
-        _this2.sendAddAction(action);
-      });
+      // ...
     }
   }, {
     key: 'render',
@@ -129,15 +92,15 @@ var Preview = function (_Component) {
         return _react2.default.createElement(
           _CenteredText2.default,
           null,
-          'Welcome to Storybook!'
+          'Welcome to Storybook!!'
         );
       }
       var _state$selection = this.state.selection;
       var kind = _state$selection.kind;
       var story = _state$selection.story;
 
-      var context = { kind: kind, story: story };
       var getStory = this.props.stories.get(kind, story);
+      var context = { kind: kind, story: story };
       return getStory(context);
     }
   }]);
@@ -146,7 +109,8 @@ var Preview = function (_Component) {
 }(_react.Component);
 
 Preview.propTypes = {
-  address: _react2.default.PropTypes.string.isRequired,
-  stories: _react2.default.PropTypes.object.isRequired
+  config: _react2.default.PropTypes.object.isRequired,
+  stories: _react2.default.PropTypes.object.isRequired,
+  actions: _react2.default.PropTypes.object.isRequired
 };
 exports.default = Preview;
