@@ -14,7 +14,7 @@ export default function startServer(port, host, config) {
   };
 
   const app = express();
-  app.get('/', (req, res) => res.send(getIndexHTML({config})));
+  app.get('/', (req, res) => res.send(getIndexHTML(config)));
   app.use(express.static(path.join(__dirname, 'public')));
 
   const server = http.Server(app);
