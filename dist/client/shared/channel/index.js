@@ -69,7 +69,8 @@ var WebSocketCh = exports.WebSocketCh = function () {
         this._messages.push({ type: type, data: data });
         return;
       }
-      this.socket.send(JSON.stringify({ type: type, data: data }));
+      var id = Math.random().toString(16).slice(2);
+      this.socket.send(JSON.stringify({ id: id, type: type, data: data }));
     }
   }, {
     key: 'on',
@@ -156,7 +157,8 @@ var FirebaseCh = exports.FirebaseCh = function () {
   _createClass(FirebaseCh, [{
     key: 'send',
     value: function send(type, data) {
-      this._writeRef.set({ type: type, data: data });
+      var id = Math.random().toString(16).slice(2);
+      this._writeRef.set({ id: id, type: type, data: data });
     }
   }, {
     key: 'on',
@@ -185,6 +187,7 @@ var FirebaseCh = exports.FirebaseCh = function () {
 
         var _snap$val = snap.val();
 
+        var id = _snap$val.id;
         var type = _snap$val.type;
         var data = _snap$val.data;
 
