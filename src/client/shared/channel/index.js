@@ -46,7 +46,8 @@ export class WebSocketCh {
       this._messages.push({type, data});
       return;
     }
-    this.socket.send(JSON.stringify({type, data}));
+    const id = Math.random().toString(16).slice(2);
+    this.socket.send(JSON.stringify({id, type, data}));
   }
 
   on(type, handler) {
@@ -109,7 +110,8 @@ export class FirebaseCh {
   }
 
   send(type, data) {
-    this._writeRef.set({type, data});
+    const id = Math.random().toString(16).slice(2);
+    this._writeRef.set({id, type, data});
   }
 
   on(type, handler) {
@@ -131,7 +133,7 @@ export class FirebaseCh {
         initialValueIgnored = true;
         return;
       }
-      const { type, data } = snap.val();
+      const { id, type, data } = snap.val();
       const handlers = this._handlers[type];
       if (handlers) {
         handlers.forEach(handler => handler(data));
