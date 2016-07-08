@@ -38,7 +38,7 @@ function startServer(port, host, config) {
 
   var app = (0, _express2.default)();
   app.get('/', function (req, res) {
-    return res.send((0, _indexHtml2.default)({ config: config }));
+    return res.send((0, _indexHtml2.default)(config));
   });
   app.use(_express2.default.static(_path2.default.join(__dirname, 'public')));
 
