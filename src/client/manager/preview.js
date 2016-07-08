@@ -13,18 +13,39 @@ export default class Preview extends React.Component {
       margin: 0,
       fontFamily: 'sans-serif',
     },
+    appetize: {
+      border: 'none',
+    },
   }
 
-  constructor(...args) {
-    super(...args);
+  constructor(props, ...args) {
+    super(props, ...args);
+  }
+
+  renderContent() {
+    if (this.props.appetizeUrl) {
+      return (
+        <iframe
+          src={this.props.appetizeUrl}
+          style={this.style.appetize}
+          width='300px'
+          height='597px'
+          scrolling='no'
+        />
+      );
+    }
+
+    return (
+      <p style={this.style.paragraph}>
+        Please check your device or simulator
+      </p>
+    );
   }
 
   render() {
     return (
       <div style={this.style.container}>
-        <p style={this.style.paragraph}>
-          Please check your device or simulator
-        </p>
+        {this.renderContent()}
       </div>
     );
   }
