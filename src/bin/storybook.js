@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
+import fs from 'fs';
+import path from 'path';
 import shell from 'shelljs';
 import program from 'commander';
+
 import startServer from '../server';
+import getIndexHTML from '../server/pages/index.html.js';
 
 //  ------------------------------------------------------------------------  //
 
@@ -19,6 +23,25 @@ program
     const config = env.config ? JSON.parse(env.config) : {};
     // listen on localhost if a host name is not given
     startServer(env.port, env.host || 'localhost', config);
+  });
+
+program
+  .command('build')
+  .option('-c, --config <config>', 'config JSON')
+  .option('-o, --outdir <outdir>', 'location to write results to')
+  .description('starts react native storybook on android simulator')
+  .action(function(env) {
+    const outdir = path.resolve(process.cwd(), env.outdir);
+    const prjdir = path.resolve(process.cwd(), 'android');
+    const config = env.config ? JSON.parse(env.config) : {};
+    shell.exec(`mkdir -p ${outdir}`);
+    // build the storybook webapp
+    shell.exec(`cp -r ${path.resolve(__dirname, '../server/public/*')} ${outdir}`);
+    fs.writeFileSync(path.join(outdir, 'index.html'), getIndexHTML(config));
+    // build the storybook android app
+    const buildenv = {...process.env, STORYBOOK_BUNDLE: 1};
+    shell.exec('./gradlew assembleStorybook', {cwd: prjdir, env: buildenv});
+    shell.exec(`cp ${path.join(prjdir, 'app/build/outputs/apk/app-storybook.apk')} ${path.join(outdir, 'storybook.apk')}`);
   });
 
 program
