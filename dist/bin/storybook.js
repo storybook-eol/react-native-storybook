@@ -19,9 +19,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _commander2.default.version(require('../../package.json').version);
 
-_commander2.default.command('start [platform]').option('-h, --host <host>', 'host to listen on').option('-p, --port <port>', 'port to listen on', parseInt).description('starts react native storybook').action(function (platform, env) {
+_commander2.default.command('start [platform]').option('-h, --host <host>', 'host to listen on').option('-p, --port <port>', 'port to listen on', parseInt).option('-c, --config <config>', 'config JSON').description('starts react native storybook').action(function (platform, env) {
+  var config = env.config ? JSON.parse(env.config) : {};
   // listen on localhost if a host name is not given
-  (0, _server2.default)(env.port, env.host || 'localhost', {});
+  (0, _server2.default)(env.port, env.host || 'localhost', config);
 });
 
 _commander2.default.command('run-ios').option('-a, --appname <appname>', 'storybook application name eg. "MyAppStorybook"').option('-i, --identifier <identifier>', 'storybook application identifier eg. "org.mycompany.MyAppStorybook"').description('starts react native storybook ios simulator').action(function (env) {
