@@ -13,10 +13,12 @@ program
   .command('start [platform]')
   .option('-h, --host <host>', 'host to listen on')
   .option('-p, --port <port>', 'port to listen on', parseInt)
+  .option('-c, --config <config>', 'config JSON')
   .description('starts react native storybook')
   .action(function(platform, env) {
+    const config = env.config ? JSON.parse(env.config) : {};
     // listen on localhost if a host name is not given
-    startServer(env.port, env.host || 'localhost', {});
+    startServer(env.port, env.host || 'localhost', config);
   });
 
 program
