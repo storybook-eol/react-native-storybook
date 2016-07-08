@@ -6,6 +6,7 @@ import Preview from './preview';
 export default class ReactNativeProvider extends Provider {
   constructor(config, ...args) {
     super(config, ...args);
+    this.config = config;
     this._channel = getChannel(config.channel);
     this.sendInit();
     this.sendGetStories();
@@ -35,6 +36,6 @@ export default class ReactNativeProvider extends Provider {
       const selection = {kind: selectedKind, story: selectedStory};
       this._channel.send('selectStory', selection);
     }
-    return <Preview />;
+    return <Preview {...this.config.preview} />;
   }
 }
