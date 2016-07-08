@@ -37,6 +37,7 @@ Object.defineProperty(exports, 'storiesOf', {
     return _configure.storiesOf;
   }
 });
+exports.configureUI = configureUI;
 exports.getStorybookUI = getStorybookUI;
 
 var _react = require('react');
@@ -51,6 +52,13 @@ var _configure2 = require('./configure');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// export API to override user configurations
+// useful when building using CI servers
+var configOverride = null;
+function configureUI(config) {
+  configOverride = config;
+}
+
 // export the function to generate the preview component
 function getStorybookUI(_config) {
   var config = _config;
@@ -61,6 +69,10 @@ function getStorybookUI(_config) {
       type: 'websocket',
       options: { address: 'ws://' + config.host + ':' + config.port }
     };
+  }
+
+  if (configOverride) {
+    config = configOverride;
   }
 
   return function () {

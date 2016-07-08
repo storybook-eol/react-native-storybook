@@ -10,6 +10,13 @@ export { setAddon } from './configure/';
 export { configure } from './configure/';
 export { storiesOf } from './configure/';
 
+// export API to override user configurations
+// useful when building using CI servers
+let configOverride = null;
+export function configureUI(config) {
+  configOverride = config;
+}
+
 // export the function to generate the preview component
 export function getStorybookUI(_config) {
   let config = _config;
@@ -20,6 +27,10 @@ export function getStorybookUI(_config) {
       type: 'websocket',
       options: { address: `ws://${config.host}:${config.port}` },
     };
+  }
+
+  if (configOverride) {
+    config = configOverride;
   }
 
   return () => <Preview config={config} stories={stories} actions={actions} />;
