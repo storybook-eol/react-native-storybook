@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.9.0
+
+* Abstract the communication layer (as "channels") and add firebase support
+* Add in-browser preview with appetize
+* Add storybook favicon
+
 ## v1.8.0
 
 * Introduce getStorybookUI method to get the UI component class.
