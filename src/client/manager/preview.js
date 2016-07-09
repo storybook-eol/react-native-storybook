@@ -1,6 +1,12 @@
 import React from 'react';
 
 export class AppetizePreview extends React.Component {
+  style = {
+    iframe: {
+      border: 'none',
+    },
+  }
+
   devices = {
     nexus5: {
       ratio: {
@@ -28,6 +34,7 @@ export class AppetizePreview extends React.Component {
 
     return (
       <iframe
+        style={this.style.iframe}
         src={`https://appetize.io/embed/${pubKey}?device=${device}&scale=${scale}`}
         width={width}
         height={height}
@@ -50,9 +57,6 @@ export default class Preview extends React.Component {
       margin: 0,
       fontFamily: 'sans-serif',
     },
-    appetize: {
-      border: 'none',
-    },
   }
 
   constructor(props, ...args) {
@@ -60,7 +64,7 @@ export default class Preview extends React.Component {
   }
 
   render() {
-    if (this.props.apetize) {
+    if (this.props.appetize) {
       return this.renderAppetize();
     }
     return (
@@ -75,15 +79,15 @@ export default class Preview extends React.Component {
   renderAppetize() {
     const children = [];
 
-    if (this.props.apetize.android) {
-      const key = this.props.apetize.android;
+    if (this.props.appetize.android) {
+      const key = this.props.appetize.android;
       children.push((
         <AppetizePreview pubKey={key} device='nexus5' height={600} />
       ));
     }
 
-    if (this.props.apetize.ios) {
-      const key = this.props.apetize.ios;
+    if (this.props.appetize.ios) {
+      const key = this.props.appetize.ios;
       children.push((
         <AppetizePreview pubKey={key} device='iphone6' height={600} />
       ));
