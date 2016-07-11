@@ -38,10 +38,6 @@ program
     // build the storybook webapp
     shell.exec(`cp -r ${path.resolve(__dirname, '../server/public/*')} ${outdir}`);
     fs.writeFileSync(path.join(outdir, 'index.html'), getIndexHTML(config));
-    // build the storybook android app
-    const buildenv = {...process.env, STORYBOOK_BUNDLE: 1};
-    shell.exec('./gradlew assembleStorybook', {cwd: prjdir, env: buildenv});
-    shell.exec(`cp ${path.join(prjdir, 'app/build/outputs/apk/app-storybook.apk')} ${path.join(outdir, 'storybook.apk')}`);
   });
 
 program

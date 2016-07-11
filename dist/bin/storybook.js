@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _fs = require('fs');
 
 var _fs2 = _interopRequireDefault(_fs);
@@ -47,10 +45,6 @@ _commander2.default.command('build').option('-c, --config <config>', 'config JSO
   // build the storybook webapp
   _shelljs2.default.exec('cp -r ' + _path2.default.resolve(__dirname, '../server/public/*') + ' ' + outdir);
   _fs2.default.writeFileSync(_path2.default.join(outdir, 'index.html'), (0, _indexHtml2.default)(config));
-  // build the storybook android app
-  var buildenv = _extends({}, process.env, { STORYBOOK_BUNDLE: 1 });
-  _shelljs2.default.exec('./gradlew assembleStorybook', { cwd: prjdir, env: buildenv });
-  _shelljs2.default.exec('cp ' + _path2.default.join(prjdir, 'app/build/outputs/apk/app-storybook.apk') + ' ' + _path2.default.join(outdir, 'storybook.apk'));
 });
 
 _commander2.default.command('run-ios').option('-a, --appname <appname>', 'storybook application name eg. "MyAppStorybook"').option('-i, --identifier <identifier>', 'storybook application identifier eg. "org.mycompany.MyAppStorybook"').description('starts react native storybook ios simulator').action(function (env) {
