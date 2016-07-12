@@ -3,23 +3,15 @@ import React from 'react';
 export class AppetizePreview extends React.Component {
   style = {
     iframe: {
-      border: 'none',
+      margin: '0 10px',
+      border: '1px solid rgb(193, 193, 193)',
     },
   }
 
   devices = {
-    nexus5: {
-      ratio: {
-        scaleToHeight: 100/795,
-        widthToHeight: 400/795,
-      }
-    },
-    iphone6: {
-      ratio: {
-        scaleToHeight: 100/870,
-        widthToHeight: 416/870,
-      }
-    }
+    nexus5: { width: 270, height: 480, scale: 75 },
+    nexus7: { width: 300, height: 480, scale: 50 },
+    iphone6: { width: 282, height: 501, scale: 75 },
   }
 
   constructor(props, ...args) {
@@ -27,15 +19,18 @@ export class AppetizePreview extends React.Component {
   }
 
   render() {
-    const { pubKey, device, height } = this.props;
-    const ratio = this.devices[device].ratio;
-    const scale = Math.floor(ratio.scaleToHeight*height);
-    const width = Math.floor(ratio.widthToHeight*height);
+    const { pubKey, device } = this.props;
+    const { width, height, scale } = this.devices[device];
+    const embed = `https://appetize.io/embed/${pubKey}`
+      + `?device=${device}`
+      + `&scale=${scale}`
+      + '&autoplay=true'
+      + '&screenOnly=true';
 
     return (
       <iframe
         style={this.style.iframe}
-        src={`https://appetize.io/embed/${pubKey}?device=${device}&scale=${scale}`}
+        src={embed}
         width={width}
         height={height}
         scrolling="no"
@@ -81,16 +76,12 @@ export default class Preview extends React.Component {
 
     if (this.props.appetize.android) {
       const key = this.props.appetize.android;
-      children.push((
-        <AppetizePreview pubKey={key} device='nexus5' height={600} />
-      ));
+      children.push(<AppetizePreview pubKey={key} device='nexus5' />);
     }
 
     if (this.props.appetize.ios) {
       const key = this.props.appetize.ios;
-      children.push((
-        <AppetizePreview pubKey={key} device='iphone6' height={600} />
-      ));
+      children.push(<AppetizePreview pubKey={key} device='iphone6' />);
     }
 
     return (
