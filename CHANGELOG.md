@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.10.1
+
+* Tweak appetize.io preview (remove frame and autoplay)
+
 ## v1.10.0
 
 * Remove android build from the build command [PR #41](https://github.com/kadirahq/react-native-storybook/pull/41).
