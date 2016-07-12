@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.10.0
+
+* Remove android build from the build command [PR #41](https://github.com/kadirahq/react-native-storybook/pull/41).
+
 ## v1.9.0
 
 * Abstract the communication layer (as "channels") and add firebase support
