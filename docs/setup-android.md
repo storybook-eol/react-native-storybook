@@ -19,11 +19,11 @@ Open `android/app/build.gradle` in your text editor and locate the `buildTypes` 
       }
 +     storybook {
 +         initWith(buildTypes.debug)
-+         applicationId "com.reactnativebutton.storybook"
++         applicationIdSuffix "storybook"
 +     }
   }
 ```
-This introduces a new build type named `storybook`. It will create an app with application id, ""com.reactnativebutton.storybook"". Use a suitable application id in place of this. Having different application ids allows both the regular app and the storybook app to stay in the same device/emulator.
+This introduces a new build type named `storybook`. It will create an app with application id, ""com.reactnativebutton.storybook"". Having different application ids allows both the regular app and the storybook app to stay in the same device/emulator.
 
 ## Step 2: override `getJSMainModuleName`
 
@@ -48,7 +48,7 @@ This checks if we are building the app using the `storybook` type we just regist
 
 ## Step 3: Add npm script to start
 
-Add a new npm script to quickly launch the storybook. Set the correct application id which you set above in the `build.gradle` file.
+Add a new npm script to quickly launch the storybook. Set the correct application id which you set above in the `build.gradle` file. Which is "storybook" suffixed to your usual application id.
 
 ```
 {
