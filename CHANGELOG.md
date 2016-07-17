@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.11.2
+
+* Get rid of the 'unique key prop' warning
+
 ## v1.11.1
 
 * Add missing imports for `storybook build` command
