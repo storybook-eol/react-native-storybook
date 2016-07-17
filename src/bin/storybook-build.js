@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import fs from 'fs';
+import path from 'path';
 import program from 'commander';
 import shell from 'shelljs';
 import getHTML from '../webapp/pages/index.html.js';
