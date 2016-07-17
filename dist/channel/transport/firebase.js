@@ -61,12 +61,12 @@ var FirebaseTransport = function () {
       var parsedUrl = (0, _urlParse2.default)(this._channelConfig.options.url);
       var protocol = parsedUrl.protocol;
       var host = parsedUrl.host;
-      var path = parsedUrl.path;
+      var pathname = parsedUrl.pathname;
 
       var config = { databaseURL: protocol + '//' + host };
       var id = Math.random().toString(16).slice(2);
       var app = _app2.default.initializeApp(config, id);
-      var ref = app.database().ref(path);
+      var ref = app.database().ref(pathname);
       return ref;
     }
   }]);
@@ -82,6 +82,6 @@ exports.default = FirebaseTransport;
 function after(n, fn) {
   var called = 0;
   return function () {
-    return called++ < n ? fn.apply(undefined, arguments) : null;
+    return ++called < n ? null : fn.apply(undefined, arguments);
   };
 }

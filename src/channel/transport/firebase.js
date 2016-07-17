@@ -33,11 +33,11 @@ export default class FirebaseTransport {
 
   _getReference() {
     const parsedUrl = parse(this._channelConfig.options.url);
-    const { protocol, host, path } = parsedUrl;
+    const { protocol, host, pathname } = parsedUrl;
     const config = { databaseURL: `${protocol}//${host}` };
     const id = Math.random().toString(16).slice(2);
     const app = firebase.initializeApp(config, id);
-    const ref = app.database().ref(path);
+    const ref = app.database().ref(pathname);
     return ref;
   }
 }
@@ -49,6 +49,6 @@ export default class FirebaseTransport {
 function after(n, fn) {
   let called = 0;
   return function (...args) {
-    return (called++ < n) ? fn(...args) : null;
+    return (++called < n) ? null : fn(...args);
   };
 }
