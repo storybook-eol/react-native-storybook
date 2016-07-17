@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.11.1
+
+* Add missing imports for `storybook build` command
+
 ## v1.11.0
 
 * Rewrite most of the code to avoid unnecessary event emitters
