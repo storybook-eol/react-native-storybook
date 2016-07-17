@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.11.0
+
+* Rewrite most of the code to avoid unnecessary event emitters
+* Improve code organization and haow it handles storybook config
+* Implement `linkTo` feature.
+
 ## v1.10.1
 
 * Tweak appetize.io preview (remove frame and autoplay)
