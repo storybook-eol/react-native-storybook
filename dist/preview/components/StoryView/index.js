@@ -6,11 +6,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _uuid = require('uuid');
+var _react = require('react');
 
-var _uuid2 = _interopRequireDefault(_uuid);
+var _react2 = _interopRequireDefault(_react);
 
-var _events = require('events');
+var _style = require('./style');
+
+var _style2 = _interopRequireDefault(_style);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20,50 +22,38 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ActionStore = function (_EventEmitter) {
-  _inherits(ActionStore, _EventEmitter);
+var StoryView = function (_React$Component) {
+  _inherits(StoryView, _React$Component);
 
-  function ActionStore() {
+  function StoryView(props) {
     var _Object$getPrototypeO;
 
-    _classCallCheck(this, ActionStore);
+    _classCallCheck(this, StoryView);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(ActionStore)).call.apply(_Object$getPrototypeO, [this].concat(args)));
+    var _this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(StoryView)).call.apply(_Object$getPrototypeO, [this, props].concat(args)));
+
+    _this.state = { storyFn: _this.props.storyFn };
+    _this.props.events.on('story', function (storyFn) {
+      return _this.setState({ storyFn: storyFn });
+    });
+    return _this;
   }
 
-  _createClass(ActionStore, [{
-    key: 'newAction',
-    value: function newAction(name) {
-      var _this2 = this;
-
-      return function () {
-        for (var _len2 = arguments.length, _args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-          _args[_key2] = arguments[_key2];
-        }
-
-        var args = Array.from(_args);
-
-        args = args.map(function (arg) {
-          if (arg && typeof arg.preventDefault === 'function') {
-            return '[SyntheticEvent]';
-          }
-          return arg;
-        });
-
-        var id = _uuid2.default.v4();
-        var data = { name: name, args: args };
-        var action = { data: data, id: id };
-
-        _this2.emit('action', action);
-      };
+  _createClass(StoryView, [{
+    key: 'render',
+    value: function render() {
+      if (!this.state.storyFn) {
+        return null;
+      }
+      return this.state.storyFn();
     }
   }]);
 
-  return ActionStore;
-}(_events.EventEmitter);
+  return StoryView;
+}(_react2.default.Component);
 
-exports.default = ActionStore;
+exports.default = StoryView;
