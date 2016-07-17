@@ -1,6 +1,14 @@
 #!/usr/bin/env node
 'use strict';
 
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _commander = require('commander');
 
 var _commander2 = _interopRequireDefault(_commander);
@@ -33,11 +41,11 @@ if (_commander2.default.config) {
 _shelljs2.default.exec('rm -rf ' + _commander2.default.outdir);
 _shelljs2.default.exec('mkdir -p ' + _commander2.default.outdir);
 
-var pubdir = path.resolve(__dirname, '../webapp/public/*');
+var pubdir = _path2.default.resolve(__dirname, '../webapp/public/*');
 _shelljs2.default.exec('cp -r ' + pubdir + ' ' + _commander2.default.outdir);
 
-var indexFile = path.join(_commander2.default.outdir, 'index.html');
-fs.writeFileSync(indexFile, (0, _indexHtml2.default)(config));
+var indexFile = _path2.default.join(_commander2.default.outdir, 'index.html');
+_fs2.default.writeFileSync(indexFile, (0, _indexHtml2.default)(config));
 
 if (_commander2.default.ios) {
   // TODO build storybook for ios
