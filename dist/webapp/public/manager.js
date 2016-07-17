@@ -34714,7 +34714,7 @@
 	    value: function renderDevice(device) {
 	      return _react2.default.createElement(
 	        'div',
-	        { style: _style2.default.device },
+	        { key: device, style: _style2.default.device },
 	        _react2.default.createElement(_AppetizeDevice2.default, { device: device })
 	      );
 	    }

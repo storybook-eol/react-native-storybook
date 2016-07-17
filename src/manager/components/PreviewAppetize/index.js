@@ -6,7 +6,7 @@ import style from './style';
 export default class PreviewAppetize extends React.Component {
   renderDevice(device) {
     return (
-      <div style={style.device}>
+      <div key={device} style={style.device}>
         <AppetizeDevice device={device} />
       </div>
     );
