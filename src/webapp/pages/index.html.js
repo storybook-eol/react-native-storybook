@@ -1,4 +1,7 @@
-export default function getHTML(config) {
+export default function getHTML(_config) {
+  const { channel, preview } = _config;
+  const config = { channel, preview };
+
   return `
   <!DOCTYPE html>
   <html>

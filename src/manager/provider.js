@@ -1,19 +1,16 @@
 import React from 'react';
 import { Provider } from '@kadira/storybook-ui';
-import getChannel from '../shared/channel';
-import Preview from './preview';
+import PreviewAppetize from './components/PreviewAppetize';
+import PreviewMessage from './components/PreviewMessage';
+import Channel from '../channel';
 
 export default class ReactNativeProvider extends Provider {
   constructor(config, ...args) {
     super(config, ...args);
-    this.config = config;
-    this._channel = getChannel(config.channel);
-    this.sendInit();
+    this._config = config;
+    this._channel = new Channel('manager', config.channel);
+    this._channel.connect();
     this.sendGetStories();
-  }
-
-  sendInit() {
-    this._channel.send('init', {clientType: 'browser'});
   }
 
   sendGetStories() {
@@ -36,6 +33,14 @@ export default class ReactNativeProvider extends Provider {
       const selection = {kind: selectedKind, story: selectedStory};
       this._channel.send('selectStory', selection);
     }
-    return <Preview {...this.config.preview} />;
+    const { type, options } = this._config.preview;
+    switch (type) {
+      case 'message':
+        return <PreviewMessage {...options} />;
+      case 'appetize':
+        return <PreviewAppetize {...options} />;
+      default:
+        throw new Error('please set preview.type');
+    }
   }
 }
