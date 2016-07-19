@@ -8,6 +8,7 @@ export default class Kind {
 
   addDecorator(decorator) {
     this._decorators.push(decorator);
+    return this;
   }
 
   add(story, fn) {

@@ -22,6 +22,7 @@ var Kind = function () {
     key: "addDecorator",
     value: function addDecorator(decorator) {
       this._decorators.push(decorator);
+      return this;
     }
   }, {
     key: "add",
