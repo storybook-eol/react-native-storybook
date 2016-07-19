@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.11.3
+
+* Make `addDecorator` return `this` to make it chainable [PR #47](https://github.com/kadirahq/react-native-storybook/pull/47).
+
 ## v1.11.2
 
 * Get rid of the 'unique key prop' warning
