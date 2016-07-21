@@ -49,7 +49,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // it and the state can only be changed from the inside of the instance code
 // We're going to pass an event emitter. The Preview class cannot be a React
 // component because it also needs to expose a couple of methods to the user.
-
 var Preview = function (_EventEmitter) {
   _inherits(Preview, _EventEmitter);
 
