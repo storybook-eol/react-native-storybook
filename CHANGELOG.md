@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.12.0
+
+* Add qr-code preview option [PR #49](https://github.com/kadirahq/react-native-storybook/pull/49).
+
 ## v1.11.3
 
 * Make `addDecorator` return `this` to make it chainable [PR #47](https://github.com/kadirahq/react-native-storybook/pull/47).
