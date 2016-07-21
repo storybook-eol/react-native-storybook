@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from '@kadira/storybook-ui';
 import PreviewAppetize from './components/PreviewAppetize';
 import PreviewMessage from './components/PreviewMessage';
+import PreviewQRCode from './components/PreviewQRCode';
 import Channel from '../channel';
 
 export default class ReactNativeProvider extends Provider {
@@ -39,6 +40,9 @@ export default class ReactNativeProvider extends Provider {
         return <PreviewMessage {...options} />;
       case 'appetize':
         return <PreviewAppetize {...options} />;
+      case 'qr-code':
+        console.log('type', type, options)
+        return <PreviewQRCode {...options} />;
       default:
         throw new Error('please set preview.type');
     }
