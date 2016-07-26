@@ -43,10 +43,14 @@ function configure(loadStories, module) {
     module.hot.accept(function () {
       return preview.sendSetStories();
     });
+    // TODO remove all global decorators on dispose
   }
 }
 
-function storiesOf(kind) {
+function storiesOf(kind, module) {
+  if (module.hot) {
+    // TODO remove the kind on dispose
+  }
   return preview.newKind(kind);
 }
 

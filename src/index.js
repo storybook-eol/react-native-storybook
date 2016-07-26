@@ -21,10 +21,14 @@ export function configure(loadStories, module) {
   loadStories();
   if (module.hot) {
     module.hot.accept(() => preview.sendSetStories());
+    // TODO remove all global decorators on dispose
   }
 }
 
-export function storiesOf(kind) {
+export function storiesOf(kind, module) {
+  if (module.hot) {
+    // TODO remove the kind on dispose
+  }
   return preview.newKind(kind);
 }
 
