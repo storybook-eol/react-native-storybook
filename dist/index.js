@@ -39,7 +39,7 @@ function setAddon(addon) {
 
 function configure(loadStories, module) {
   loadStories();
-  if (module.hot) {
+  if (module && module.hot) {
     module.hot.accept(function () {
       return preview.sendSetStories();
     });
@@ -48,7 +48,7 @@ function configure(loadStories, module) {
 }
 
 function storiesOf(kind, module) {
-  if (module.hot) {
+  if (module && module.hot) {
     // TODO remove the kind on dispose
   }
   return preview.newKind(kind);
