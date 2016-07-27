@@ -41,7 +41,6 @@ export default class ReactNativeProvider extends Provider {
       case 'appetize':
         return <PreviewAppetize {...options} />;
       case 'qr-code':
-        console.log('type', type, options)
         return <PreviewQRCode {...options} />;
       default:
         throw new Error('please set preview.type');
