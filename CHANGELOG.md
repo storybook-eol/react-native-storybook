@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.12.1
+
+* Disable react warnings (these should be handled in storybook-ui repo)
+
 ## v1.12.0
 
 * Add qr-code preview option [PR #49](https://github.com/kadirahq/react-native-storybook/pull/49).
