@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## pending
+## v1.12.2
 
+* Make the `module` argument optional
 * Remove unnecessary console.log statement
 
 ## v1.12.1
