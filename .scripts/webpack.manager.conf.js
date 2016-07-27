@@ -2,12 +2,12 @@ var path = require('path');
 var webpack = require('webpack');
 
 const plugins = [
-  // new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"production"' }),
-  // new webpack.optimize.OccurenceOrderPlugin(),
-  // new webpack.optimize.DedupePlugin(),
-  // new webpack.optimize.UglifyJsPlugin({
-  //   compress: { warnings: false },
-  // }),
+  new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"production"' }),
+  new webpack.optimize.OccurenceOrderPlugin(),
+  new webpack.optimize.DedupePlugin(),
+  new webpack.optimize.UglifyJsPlugin({
+    compress: { warnings: false },
+  }),
 ];
 
 module.exports = {
