@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## pending
+
+* Remove unnecessary console.log statement
+
 ## v1.12.1
 
 * Disable react warnings (these should be handled in storybook-ui repo)
