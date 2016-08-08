@@ -90,31 +90,30 @@ var Preview = function (_EventEmitter) {
     value: function startChannel() {
       var _this2 = this;
 
-      this._channel = new _channel2.default('preview', this._config.channel);
+      this._channel = (0, _channel2.default)(this._config.channel);
       this._channel.on('getStories', function (d) {
         return _this2.sendSetStories();
       });
       this._channel.on('selectStory', function (d) {
         return _this2.selectStory(d);
       });
-      this._channel.connect();
       this.sendSetStories();
     }
   }, {
     key: 'sendAddAction',
     value: function sendAddAction(action) {
-      this._channel.send('addAction', { action: action });
+      this._channel.emit('addAction', { action: action });
     }
   }, {
     key: 'sendSetStories',
     value: function sendSetStories() {
       var stories = this._stories.dump();
-      this._channel.send('setStories', { stories: stories });
+      this._channel.emit('setStories', { stories: stories });
     }
   }, {
     key: 'sendSelectStory',
     value: function sendSelectStory(kind, story) {
-      this._channel.send('selectStory', { kind: kind, story: story });
+      this._channel.emit('selectStory', { kind: kind, story: story });
     }
   }, {
     key: 'setAddon',

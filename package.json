@@ -43,16 +43,16 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
+    "@kadira/storybook-channel-firebase": "^1.0.0",
+    "@kadira/storybook-channel-websocket": "^1.0.0",
     "@kadira/storybook-ui": "^2.1.1",
     "commander": "^2.9.0",
     "events": "^1.1.0",
     "express": "^4.14.0",
-    "firebase": "^3.1.0",
     "mocha": "^2.5.3",
     "qrcode.react": "^0.6.1",
     "react-dom": "^15.1.0",
     "shelljs": "^0.7.0",
-    "url-parse": "^1.1.1",
     "ws": "^1.1.0"
   }
 }
