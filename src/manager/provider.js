@@ -3,23 +3,22 @@ import { Provider } from '@kadira/storybook-ui';
 import PreviewAppetize from './components/PreviewAppetize';
 import PreviewMessage from './components/PreviewMessage';
 import PreviewQRCode from './components/PreviewQRCode';
-import Channel from '../channel';
+import createChannel from '../channel';
 
 export default class ReactNativeProvider extends Provider {
   constructor(config, ...args) {
     super(config, ...args);
     this._config = config;
-    this._channel = new Channel('manager', config.channel);
-    this._channel.connect();
+    this._channel = createChannel(config.channel);
     this.sendGetStories();
   }
 
   sendGetStories() {
-    this._channel.send('getStories', {});
+    this._channel.emit('getStories', {});
   }
 
   sendSelectStory(kind, story) {
-    this._channel.send('selectStory', {kind, story})
+    this._channel.emit('selectStory', {kind, story})
   }
 
   handleAPI(api) {
@@ -32,7 +31,7 @@ export default class ReactNativeProvider extends Provider {
   renderPreview(selectedKind, selectedStory) {
     if (selectedKind && selectedStory) {
       const selection = {kind: selectedKind, story: selectedStory};
-      this._channel.send('selectStory', selection);
+      this._channel.emit('selectStory', selection);
     }
     const { type, options } = this._config.preview;
     switch (type) {

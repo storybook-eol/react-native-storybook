@@ -1,7 +1,7 @@
 import React from 'react';
 import { EventEmitter } from 'events';
 import { getDefaultConfig } from '../config';
-import Channel from '../channel';
+import createChannel from '../channel';
 import Kind from './utils/kind';
 import * as stories from './utils/stories';
 import * as actions from './utils/actions';
@@ -35,24 +35,23 @@ export default class Preview extends EventEmitter {
   }
 
   startChannel() {
-    this._channel = new Channel('preview', this._config.channel);
+    this._channel = createChannel(this._config.channel);
     this._channel.on('getStories', d => this.sendSetStories());
     this._channel.on('selectStory', d => this.selectStory(d));
-    this._channel.connect();
     this.sendSetStories();
   }
 
   sendAddAction(action) {
-    this._channel.send('addAction', {action});
+    this._channel.emit('addAction', {action});
   }
 
   sendSetStories() {
     const stories = this._stories.dump();
-    this._channel.send('setStories', {stories});
+    this._channel.emit('setStories', {stories});
   }
 
   sendSelectStory(kind, story) {
-    this._channel.send('selectStory', {kind, story})
+    this._channel.emit('selectStory', {kind, story})
   }
 
   setAddon(addon) {
