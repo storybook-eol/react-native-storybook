@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.12.3
+
+* Use channel modules [PR #52](https://github.com/kadirahq/react-native-storybook/pull/52).
+
 ## v1.12.2
 
 * Make the `module` argument optional
