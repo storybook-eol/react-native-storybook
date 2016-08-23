@@ -1,6 +1,6 @@
 # Setup Storybook for iOS
 
-Replacing the main *index.ios.js* maybe good for cuickly checking it out but for long term use, it is recommended to setup the storybook as a separate app. After completing these steps:
+Replacing the main *index.ios.js* maybe good for quickly checking it out but for long term use, it is recommended to setup the storybook as a separate app. After completing these steps:
 
 - The storybook can be started without changing your app javascript files
 - Both the app and storybook can be installed on your device at the same time
@@ -45,7 +45,7 @@ Open *ios/ReactNativeButton/AppDelegate.m* file and replace code from
 to
 
 ```objective-c
-//   jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+//   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
 ```
 
 with
@@ -53,10 +53,8 @@ with
 ```objective-c
 #ifdef STORYBOOK
   jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/storybook/index.ios.bundle?platform=ios&dev=true"];
-#elif defined DEBUG
-  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
 #else
-  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
 #endif
 ```
 
