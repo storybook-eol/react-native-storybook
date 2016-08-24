@@ -52,7 +52,7 @@ with
 
 ```objective-c
 #ifdef STORYBOOK
-  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/storybook/index.ios.bundle?platform=ios&dev=true"];
+  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"storybook/index.ios" fallbackResource:nil];
 #else
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
 #endif
