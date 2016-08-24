@@ -60,7 +60,24 @@ with
 
 ![Replace code](assets/setup-ios/step-4-replace-location.png)
 
-## Step 5: add npm script to start
+## Step 5: add storybook index file
+
+Add a new file at `storybook/index.ios.js` with the following:
+
+```js
+import { AppRegistry } from 'react-native';
+import { getStorybookUI, configure } from '@kadira/react-native-storybook';
+
+// import your stories
+configure(() => {
+  require('../src/stories');
+}, module);
+
+const StorybookUI = getStorybookUI({port: 9001, host: 'localhost'});
+AppRegistry.registerComponent('ReactNativeButton', () => StorybookUI); // NB: NOT ReactNativeButtonStorybook
+```
+
+## Step 6: add npm script to start
 
 Add a new npm script to quickly launch the storybook. Set the correct app identifier which is available in the **ReactNativeButtonStorybookInfo.plist** file.
 
