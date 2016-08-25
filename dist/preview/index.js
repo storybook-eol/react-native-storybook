@@ -53,7 +53,7 @@ var Preview = function (_EventEmitter) {
   _inherits(Preview, _EventEmitter);
 
   function Preview() {
-    var _Object$getPrototypeO;
+    var _ref;
 
     _classCallCheck(this, Preview);
 
@@ -61,7 +61,7 @@ var Preview = function (_EventEmitter) {
       args[_key] = arguments[_key];
     }
 
-    var _this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Preview)).call.apply(_Object$getPrototypeO, [this].concat(args)));
+    var _this = _possibleConstructorReturn(this, (_ref = Preview.__proto__ || Object.getPrototypeOf(Preview)).call.apply(_ref, [this].concat(args)));
 
     _this._config = (0, _config.getDefaultConfig)();
     _this._configFrozen = false;

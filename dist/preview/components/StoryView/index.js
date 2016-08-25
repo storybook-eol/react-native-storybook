@@ -26,7 +26,7 @@ var StoryView = function (_React$Component) {
   _inherits(StoryView, _React$Component);
 
   function StoryView(props) {
-    var _Object$getPrototypeO;
+    var _ref;
 
     _classCallCheck(this, StoryView);
 
@@ -34,7 +34,7 @@ var StoryView = function (_React$Component) {
       args[_key - 1] = arguments[_key];
     }
 
-    var _this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(StoryView)).call.apply(_Object$getPrototypeO, [this, props].concat(args)));
+    var _this = _possibleConstructorReturn(this, (_ref = StoryView.__proto__ || Object.getPrototypeOf(StoryView)).call.apply(_ref, [this, props].concat(args)));
 
     _this.state = { storyFn: _this.props.storyFn };
     _this.props.events.on('story', function (storyFn) {
