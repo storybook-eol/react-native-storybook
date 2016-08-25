@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v1.12.4
+## v1.12.5
 
 * Support react native versions 0.27.0 to 0.30.x [PR #55](https://github.com/kadirahq/react-native-storybook/pull/55).
 
