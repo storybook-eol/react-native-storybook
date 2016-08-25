@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.12.4
+
+* Support react native versions 0.27.0 to 0.30.x [PR #55](https://github.com/kadirahq/react-native-storybook/pull/55).
+
 ## v1.12.3
 
 * Use channel modules [PR #52](https://github.com/kadirahq/react-native-storybook/pull/52).
