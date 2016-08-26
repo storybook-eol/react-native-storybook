@@ -67,7 +67,7 @@ export default class Preview {
       this._sendSetStories();
       this._sendGetCurrentStory();
       // finally return the preview component
-      return <StoryView events={this._events} />;
+      return <StoryView events={this._events} channel={channel} />;
     }
   }
 
