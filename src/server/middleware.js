@@ -1,4 +1,6 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
+import path from 'path';
+import process from 'process';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
@@ -27,6 +29,15 @@ export default function (configDir) {
   const router = new Router();
   router.use(webpackDevMiddleware(compiler, devMiddlewareOptions));
   router.use(webpackHotMiddleware(compiler));
+
+  function resolvePath(str) {
+    if (str.substr(0, 2) === '~/') {
+      str = (process.env.HOME || process.env.HOMEPATH || process.env.HOMEDIR || process.cwd()) + str.substr(1);
+    }
+    return path.resolve(str);
+  }
+
+  router.use('/screenshot', express.static(resolvePath('~/Library/Developer/CoreSimulator/Devices')))
 
   router.get('/', function (req, res) {
     res.send(getIndexHtml(publicPath));

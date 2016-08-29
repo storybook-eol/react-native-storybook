@@ -2,6 +2,7 @@ import React from 'react';
 import { Provider } from '@kadira/storybook-ui';
 import createChannel from '@kadira/storybook-channel-websocket';
 import addons from '@kadira/storybook-addons';
+import StorySnapshotView from './components/StorySnapshotView';
 
 export default class ReactProvider extends Provider {
   constructor({ url }) {
@@ -21,7 +22,7 @@ export default class ReactProvider extends Provider {
   renderPreview(kind, story) {
     this.selection = { kind, story };
     this.channel.emit('setCurrentStory', { kind, story });
-    return null;
+    return <StorySnapshotView channel={this.channel} />;
   }
 
   handleAPI(api) {
