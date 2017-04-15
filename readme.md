@@ -2,6 +2,12 @@
 
 With React Native Storybook you can design and develop individual React Native components without running your app.
 
+--- 
+
+**This repo has been deprecated because it's now included in https://github.com/storybooks/storybook**
+
+---
+
 ![React Storybook Screenshot](docs/assets/readme/screenshot.png)
 
 ## Getting Started
